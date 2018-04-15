@@ -1,30 +1,30 @@
 public class Drone {
 
-    private int largo;
-    private int ancho;
-    private int altura;
-    private int velocidad;
+    private int LENGHT;
+    private int WIDTH;
+    private int HIGH;
+    private int SPEED;
 
     public Drone() {
-        this.largo = 2;
-        this.ancho = 2;
-        this.altura = 3;
-        this.velocidad = 120;
+        this.LENGHT = 2;
+        this.WIDTH = 2;
+        this.HIGH = 3;
+        this.SPEED= 120;
     }
 
-    public int getLargo() {
-        return largo;
+    public int getLENGHT() {
+        return LENGHT;
     }
 
-    public int getAncho() {
-        return ancho;
+    public int getWIDTH() {
+        return WIDTH;
     }
 
-    public int getAltura() {
-        return altura;
+    public int getHIGH() {
+        return HIGH;
     }
 
-    public int getVelocidad() {
-        return velocidad;
+    public int getSPEED() {
+        return SPEED;
     }
 }
