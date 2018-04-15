@@ -34,6 +34,6 @@ public class Trip {
     }
 
     public int calcularTiempo() {
-        return 1;
+        return 2;
     }
 }
