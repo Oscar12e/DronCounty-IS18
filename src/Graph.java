@@ -10,7 +10,5 @@ public class Graph<T extends Comparable<T>>{
 
     public Graph(){
         vertexList = new ArrayList<Node>();
-
-        int i = 0;
     }
 }

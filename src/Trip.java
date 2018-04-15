@@ -2,14 +2,12 @@ public class Trip {
 
     private Drone drone;
     private int dronesQuantity;
-    private Station stationA;
-    private Station stationB;
+    private Station destinyStation;
     private int time;
 
-    public Trip(Drone drone, Station stationA, Station stationB, int cantDrones) {
+    public Trip(Drone drone, Station stationA, int cantDrones) {
         this.drone = drone;
-        this.stationA = stationA;
-        this.stationB = stationB;
+        this.destinyStation = stationA;
         this.dronesQuantity = cantDrones;
     }
 
@@ -18,12 +16,9 @@ public class Trip {
     }
 
     public Station getStationA() {
-        return stationA;
+        return destinyStation;
     }
 
-    public Station getStationB() {
-        return stationB;
-    }
 
     public int getDronesQuantity() {
         return dronesQuantity;
