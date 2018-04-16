@@ -1,34 +1,16 @@
 package View;
-import java.awt.event.ActionListener;
-import javax.swing.*;
+import javafx.application.Application;
+import javafx.fxml.Initializable;
+import javafx.stage.Stage;
 
-public class AirTrafficSimulationView extends JFrame{
+import java.net.URL;
+import java.util.ResourceBundle;
 
-    private JLabel LB_typeOfSimulation = new JLabel("Elija el tipo de simulación a realizar");
-    private JButton BTN_heuristic = new JButton("Heuristica");
-    private JButton BTN_probabilistic = new JButton("Probabilistica");
-    private JButton BTN_backtracking = new JButton("Backtracking");
-
-
-    AirTrafficSimulationView(){
-
-        JPanel simulationPanel = new JPanel();
-
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(200, 200);
+public class AirTrafficSimulationView implements Initializable {
 
 
-        simulationPanel.add(LB_typeOfSimulation);
-        simulationPanel.add(BTN_heuristic);
-        simulationPanel.add(BTN_probabilistic);
-        simulationPanel.add(BTN_backtracking);
-
-        this.add(simulationPanel);
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
     }
-
-    void displayErrorMessage(String errorMessage){
-        JOptionPane.showMessageDialog(this, errorMessage);
-    }
-
 }
