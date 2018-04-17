@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Node<T> {
     private T value;
-    private ArrayList<Node<T>> edges;
+    private ArrayList<Node<T>> arcs;
     private ArrayList<Node<T>> next;
 
     public T getValue() {
@@ -13,12 +13,12 @@ public class Node<T> {
         this.value = value;
     }
 
-    public ArrayList<Node<T>> getEdges() {
-        return edges;
+    public ArrayList<Node<T>> getArcs() {
+        return arcs;
     }
 
-    public void setEdges(ArrayList<Node<T>> edges) {
-        this.edges = edges;
+    public void setArcs(ArrayList<Node<T>> arcs) {
+        this.arcs = arcs;
     }
 
     public ArrayList<Node<T>> getNext() {

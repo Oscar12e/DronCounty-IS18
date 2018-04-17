@@ -7,10 +7,15 @@ public class Graph<T extends Comparable<T>>{
         return vertexList;
     }
 
-
     public Graph(){
         vertexList = new ArrayList<Node>();
 
         int i = 0;
+    }
+
+    public ArrayList<Integer> principalDijkstra(int begin, int end){
+        ArrayList<Integer> path = new ArrayList<Integer>();
+        return null;
+
     }
 }

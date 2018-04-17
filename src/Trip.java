@@ -1,19 +1,19 @@
 public class Trip {
 
-    private Drone drone;
+    private DroneMeasure drone;
     private int dronesQuantity;
     private Station stationA;
     private Station stationB;
     private int time;
 
-    public Trip(Drone drone, Station stationA, Station stationB, int cantDrones) {
+    public Trip(DroneMeasure drone, Station stationA, Station stationB, int cantDrones) {
         this.drone = drone;
         this.stationA = stationA;
         this.stationB = stationB;
         this.dronesQuantity = cantDrones;
     }
 
-    public Drone getDrone() {
+    public DroneMeasure getDrone() {
         return drone;
     }
 
