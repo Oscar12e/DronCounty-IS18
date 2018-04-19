@@ -47,7 +47,7 @@ public class Graph<T extends Comparable<T>>{
         }
     }
 
-    public void dijkstra(Node origin, Node destiny){
+    public void dijkstra(Node origin){
         PriorityQueue<Node>  queue = new PriorityQueue<Node>();
         origin.setMinDistance(0);
         queue.add(origin);
@@ -69,6 +69,18 @@ public class Graph<T extends Comparable<T>>{
                     queue.add(neighbour.getDestiny());
                 }
             }
+        }
+    }
+
+    public void cleanPaths(){
+        for (int i = 0; i<vertexList.size(); i++){
+            vertexList.get(i).setPath(null);
+        }
+    }
+
+    public void cleanMinDistance(){
+        for (int i = 0; i<vertexList.size(); i++){
+            vertexList.get(i).setMinDistance(Integer.MAX_VALUE);
         }
     }
 
