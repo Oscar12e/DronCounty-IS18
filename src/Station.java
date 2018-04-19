@@ -14,6 +14,11 @@ public class Station {
         this.idStation = idStation;
     }
 
+    public Station(int idStation) {
+        this.idStation = idStation;
+        this.paths = new Hashtable<>();
+    }
+
     public int getTotalDronesQuantity() {
         return totalDronesQuantity;
     }
@@ -33,4 +38,6 @@ public class Station {
     public Hashtable<Integer, Integer> getDronesLeft() {
         return dronesLeft;
     }
+
+
 }

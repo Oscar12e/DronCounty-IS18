@@ -1,36 +1,62 @@
+import com.sun.deploy.util.ArrayUtil;
+
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Node<T> {
     private T value;
-    private ArrayList<Node<T>> arcs;
-    private ArrayList<Node<T>> next;
+    private boolean visited;
+    private ArrayList<Arc> arcs;
+    private int minDistance;
+    private LinkedList<Node> path;
+
+    public Node(T value){
+        this.value = value;
+        this.visited = false;
+        this.arcs = new ArrayList<>();
+        this.minDistance = Integer.MAX_VALUE;
+    }
 
     public T getValue() {
         return value;
     }
 
-    public void setValue(T value) {
-        this.value = value;
+    public boolean isVisited() {
+        return visited;
     }
 
-    public ArrayList<Node<T>> getArcs() {
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public ArrayList<Arc> getArcs() {
         return arcs;
     }
 
-    public void setArcs(ArrayList<Node<T>> arcs) {
-        this.arcs = arcs;
+    public int getMinDistance() {
+        return minDistance;
     }
 
-    public ArrayList<Node<T>> getNext() {
-        return next;
+    public void setMinDistance(int minDistance) {
+        this.minDistance = minDistance;
     }
 
-    public void setNext(ArrayList<Node<T>> next) {
-        this.next = next;
+    public LinkedList<Node> getPath() {
+        return path;
     }
 
-    public Node(T pValor){
-        this.value = pValor;
+    public void setPath(LinkedList<Node> path) {
+        this.path = path;
     }
+
+    public boolean isAdjacentNode(Station value){
+        for(int i=0; i<arcs.size(); i++){
+            if(arcs.get(i).getDestiny().getValue() == value){//Como getIdStation
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }
