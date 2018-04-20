@@ -1,3 +1,5 @@
+package Simulation;
+
 import java.util.Hashtable;
 
 public class Station {
