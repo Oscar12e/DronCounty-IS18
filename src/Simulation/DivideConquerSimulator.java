@@ -1,3 +1,5 @@
+package Simulation;
+
 public class DivideConquerSimulator extends DroneController {
 
     @Override

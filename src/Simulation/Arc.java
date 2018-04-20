@@ -1,3 +1,5 @@
+package Simulation;
+
 public class Arc {
 
     private int weight;
