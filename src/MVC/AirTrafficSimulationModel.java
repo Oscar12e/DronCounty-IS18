@@ -1,4 +1,4 @@
-package Model;
+package MVC;
 
 public class AirTrafficSimulationModel {
 }

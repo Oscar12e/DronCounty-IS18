@@ -1,4 +1,4 @@
-package View;
+package MVC;
 import javafx.application.Application;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;

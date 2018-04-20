@@ -1,3 +1,5 @@
+package Simulation;
+
 public class Trip {
 
     private Drone drone;

@@ -10,17 +10,12 @@ public class Main extends Application {
 
     public static void main(String[] args){
         System.out.println("Hola mundo");
-
         launch(args);
-
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-
-
-        Parent root = FXMLLoader.load(getClass().getResource("View/AirTrafficSimulationView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("MVC/AirTrafficSimulationView.fxml"));
         primaryStage.setTitle("Hello app");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
