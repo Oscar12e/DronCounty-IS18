@@ -8,7 +8,7 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.AirTrafficSimulationView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.AirTrafficSimulationController">
    <children>
       <ScrollPane layoutX="42.0" layoutY="201.0" prefHeight="167.0" prefWidth="530.0">
         <content>
@@ -44,7 +44,7 @@
                   <RadioButton fx:id="RB_Probabilistic" layoutX="247.0" layoutY="119.0" mnemonicParsing="false" text="Probabilistico" toggleGroup="$algorithmSelection" />
                   <RadioButton fx:id="RB_Heuristic" layoutX="357.0" layoutY="119.0" mnemonicParsing="false" text="Heuristico" toggleGroup="$algorithmSelection" />
                   <Label layoutX="47.0" layoutY="119.0" text="Algotitmo:" />
-                  <Button fx:id="BTN_startSimulation" layoutX="237.0" layoutY="135.0" mnemonicParsing="false" text="Iniciar simulacion" />
+                  <Button layoutX="237.0" layoutY="135.0" mnemonicParsing="false" onAction="#getAlgorithmSelection" text="Iniciar simulacion" />
                    
 
 

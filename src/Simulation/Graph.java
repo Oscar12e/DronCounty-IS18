@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
-public class Graph<T extends Comparable<T>>{
+public class Graph{
     private ArrayList<Node> vertexList;
 
     public ArrayList<Node> getVertexList() {

@@ -2,7 +2,7 @@ package Simulation;
 
 import java.util.Hashtable;
 
-public class Station {
+public class Station implements Comparable<Station> {
 
     private int totalDronesQuantity;
     private int currentDronesQuantity;
@@ -42,4 +42,14 @@ public class Station {
     }
 
 
+    @Override
+    public int compareTo(Station otherObject) {
+        int difference = this.idStation - otherObject.getIdStation();
+        if (difference == 0)
+            return 0;
+        else if (difference > 0)
+            return 1;
+        else
+            return -1;
+    }
 }

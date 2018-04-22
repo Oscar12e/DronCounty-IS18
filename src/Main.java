@@ -11,7 +11,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args){
-        System.out.println("Hola mundo");
+        System.out.println("Iniciando aplicación");
         launch(args);
     }
 
@@ -33,3 +33,6 @@ public class Main extends Application {
         */
     }
 }
+
+
+
