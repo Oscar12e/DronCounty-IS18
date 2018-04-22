@@ -7,17 +7,13 @@ public class DroneMeasure {
     private static final int HIGH = 3;
     private static final int SPEED = 120;
 
-    private static DroneMeasure ourInstance = null;
+    private static DroneMeasure ourInstance = new DroneMeasure();
 
     public static DroneMeasure getInstance() {
-        if(ourInstance == null) {
-            ourInstance = new DroneMeasure();
-        }
         return ourInstance;
     }
 
-    private DroneMeasure() {
-    }
+
 
     public int getLENGTH() {
         return LENGTH;

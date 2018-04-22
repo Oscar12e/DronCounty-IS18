@@ -1,14 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="MVC.AirTrafficSimulationView"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.AirTrafficSimulationView">
+   <children>
+      <ScrollPane layoutX="42.0" layoutY="201.0" prefHeight="167.0" prefWidth="530.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="520.0">
+               <children>
 
+                  <Label layoutX="25.0" layoutY="15.0" prefHeight="25.0" text="Cantidad de estaciones: " />
+                   <Spinner fx:id="SB_stationQuantity" editable="true" layoutX="155.0" layoutY="15.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+
+                   <Label layoutX="25.0" layoutY="50.0" prefHeight="25.0" text="Cantidad de viajes:" />
+                   <Spinner fx:id="SB_tripsQuantity" editable="true" layoutX="155.0" layoutY="50.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+
+                  <Label layoutX="50.0" layoutY="83.0" prefHeight="25.0" text="Dimensiones de las pistas (km)" />
+                   <Label layoutX="250.0" layoutY="85.0" prefHeight="25.0" text="Alto:" />
+                   <Spinner fx:id="SB_heightMeasure" editable="true" layoutX="290.0" layoutY="85.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+                   <Label layoutX="400.0" layoutY="85.0" prefHeight="25.0" text="Ancho:" />
+                   <Spinner fx:id="SB_widthMeasure" editable="true" layoutX="440.0" layoutY="85.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+
+
+                   <Label layoutX="275.0" layoutY="15.0" prefHeight="25.0" text="Arcos por cada estación: " />
+                   <Spinner fx:id="SB_arcsQuantity" editable="true" layoutX="430.0" layoutY="10.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+
+                  <Label layoutX="275.0" layoutY="50.0" prefHeight="25.0" text="Hora simulada en segundos: " />
+                   <Spinner fx:id="SB_hourEquivalent" editable="true" layoutX="430.0" layoutY="50.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+
+
+
+                   <Label layoutX="20.0" layoutY="135.0" prefHeight="25.0" text="Tiempo estimado: (Calculando)" />
+                  <RadioButton fx:id="RB_Backtracking" layoutX="139.0" layoutY="119.0" mnemonicParsing="false" selected="true" text="Backtracking">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="algorithmSelection" />
+                     </toggleGroup></RadioButton>
+                  <RadioButton fx:id="RB_Probabilistic" layoutX="247.0" layoutY="119.0" mnemonicParsing="false" text="Probabilistico" toggleGroup="$algorithmSelection" />
+                  <RadioButton fx:id="RB_Heuristic" layoutX="357.0" layoutY="119.0" mnemonicParsing="false" text="Heuristico" toggleGroup="$algorithmSelection" />
+                  <Label layoutX="47.0" layoutY="119.0" text="Algotitmo:" />
+                  <Button fx:id="BTN_startSimulation" layoutX="237.0" layoutY="135.0" mnemonicParsing="false" text="Iniciar simulacion" />
+                   
+
+
+
+               </children></AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
 </AnchorPane>
