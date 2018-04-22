@@ -1,3 +1,4 @@
+import Simulation.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,19 +10,18 @@ import java.net.URL;
 
 public class Main extends Application {
 
-
     public static void main(String[] args){
         System.out.println("Iniciando aplicación");
         launch(args);
+        Trip trip;
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL resource = getClass().getResource("MVC/AirTrafficSimulationView.fxml");
         System.out.println(resource);
-        System.out.println("Hola");
-        Parent root = FXMLLoader.load(resource);
-        primaryStage.setTitle("Hello app");
+        Parent root = FXMLLoader.load(getClass().getResource("MVC/AirTrafficSimulationView.fxml"));
+        primaryStage.setTitle("Hello It's me");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();

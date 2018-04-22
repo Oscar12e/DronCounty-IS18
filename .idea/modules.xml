@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/DronCounty-IS18.iml" filepath="$PROJECT_DIR$/.idea/DronCounty-IS18.iml" />
       <module fileurl="file://$PROJECT_DIR$/DronCounty-IS18.iml" filepath="$PROJECT_DIR$/DronCounty-IS18.iml" />
     </modules>
   </component>

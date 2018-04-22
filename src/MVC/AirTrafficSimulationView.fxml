@@ -45,9 +45,6 @@
                   <RadioButton fx:id="RB_Heuristic" layoutX="357.0" layoutY="119.0" mnemonicParsing="false" text="Heuristico" toggleGroup="$algorithmSelection" />
                   <Label layoutX="47.0" layoutY="119.0" text="Algotitmo:" />
                   <Button layoutX="237.0" layoutY="135.0" mnemonicParsing="false" onAction="#getAlgorithmSelection" text="Iniciar simulacion" />
-                   
-
-
 
                </children></AnchorPane>
         </content>
