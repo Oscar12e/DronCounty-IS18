@@ -1,5 +1,6 @@
 package MVC;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.ToggleGroup;
@@ -10,7 +11,8 @@ import java.util.ResourceBundle;
 
 
 public class AirTrafficSimulationController  implements Initializable {
-    @FXML private  ToggleGroup algorithmSelection;
+    @FXML private Button BTN_startSimulation;
+    @FXML private ToggleGroup algorithmSelection;
     @FXML private Spinner<Integer> SB_stationQuantity;
     @FXML private Spinner<Integer> SB_tripsQuantity;
     @FXML private Spinner<Integer> SB_heightMeasure;
@@ -22,7 +24,7 @@ public class AirTrafficSimulationController  implements Initializable {
     @FXML private RadioButton RB_Probabilistic;
     @FXML private RadioButton RB_Heuristic;
 
-    //private AirTrafficSimulationModel theModel = new AirTrafficSimulationModel();
+    private AirTrafficSimulationModel theModel = new AirTrafficSimulationModel();
 
 
     @Override
@@ -32,35 +34,25 @@ public class AirTrafficSimulationController  implements Initializable {
     }
 
 
-    public int getSB_stationQuantity() {
-        return SB_stationQuantity.getValue();
+
+    public void startSimulation(){
+
     }
 
-    public int getSB_tripsQuantity() {
-        return SB_tripsQuantity.getValue();
-    }
+    public void setSimulationParameters(){
+        theModel.setArcsPerStation(SB_arcsQuantity.getValue());
+        theModel.setSimulateHourEquivalentToMiliseconds(SB_hourEquivalent.getValue());
+        theModel.setStationsAmount(SB_stationQuantity.getValue());
+        theModel.setTripsAmount(SB_tripsQuantity.getValue());
+        theModel.createGraph(SB_stationQuantity.getValue(), SB_arcsQuantity.getValue());
 
-    public int getSB_heightMeasure() {
-        return SB_heightMeasure.getValue();
-    }
-
-    public int getSB_widthMeasure() {
-        return SB_widthMeasure.getValue();
-    }
-
-    public int getSB_arcsQuantity() {
-        return SB_arcsQuantity.getValue();
-    }
-
-    public int getSB_hourEquivalent() {
-        return SB_hourEquivalent.getValue();
-    }
-
-    public void getAlgorithmSelection(){
         RadioButton selectedButton = (RadioButton) algorithmSelection.getSelectedToggle();
+        theModel.setSimulator(selectedButton.getText());
 
-        System.out.println(selectedButton.getText());
-        System.out.println("Presionado");
+        BTN_startSimulation.setDisable(false);
+
     }
+
+
 }
 
