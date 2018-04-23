@@ -4,12 +4,12 @@ public class Trip {
 
     private DroneMeasure drone;
     private int dronesQuantity;
-    private Station stationB;
+    private Station stationDestiny;
     private int time;
 
     public Trip(Station stationB, int cantDrones) {
         this.drone =  DroneMeasure.getInstance();
-        this.stationB = stationB;
+        this.stationDestiny = stationB;
         this.dronesQuantity = cantDrones;
     }
 
@@ -17,8 +17,8 @@ public class Trip {
         return drone;
     }
 
-    public Station getStationB() {
-        return stationB;
+    public Station getStationDestiny() {
+        return stationDestiny;
     }
 
     public int getDronesQuantity() {

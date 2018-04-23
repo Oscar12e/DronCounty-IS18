@@ -1,6 +1,6 @@
 package Simulation;
 
-public class DivideConquerSimulator extends DroneController {
+public class DivideConquerSimulator implements DroneController {
 
     @Override
     public boolean runSimulation(){

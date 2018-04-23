@@ -1,5 +1,6 @@
 package Simulation;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class Station implements Comparable<Station> {
@@ -7,13 +8,14 @@ public class Station implements Comparable<Station> {
     private int totalDronesQuantity;
     private int currentDronesQuantity;
     private int idStation;
-    private Hashtable<Integer,Integer> paths;
+    private Hashtable<Integer, ArrayList<Integer>> paths;
     private Hashtable<Integer,Integer> dronesLeft;
 
-    public Station(int quantityDronesTotal, int currentDronesQuantity, int idStation) {
+    public Station(int quantityDronesTotal, int idStation, Hashtable<Integer,Integer> pDronesLeft) {
         this.totalDronesQuantity = quantityDronesTotal;
-        this.currentDronesQuantity = currentDronesQuantity;
+        this.currentDronesQuantity = quantityDronesTotal;
         this.idStation = idStation;
+        this.dronesLeft = pDronesLeft;
     }
 
     public Station(int idStation) {
@@ -33,7 +35,7 @@ public class Station implements Comparable<Station> {
         return idStation;
     }
 
-    public Hashtable<Integer, Integer> getPaths() {
+    public Hashtable<Integer, ArrayList<Integer>> getPaths() {
         return paths;
     }
 

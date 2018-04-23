@@ -1,6 +1,6 @@
 package Simulation;
 
-public class ProbabilisticSimulator extends DroneController {
+public class ProbabilisticSimulator implements DroneController {
 
     @Override
     public boolean runSimulation(){

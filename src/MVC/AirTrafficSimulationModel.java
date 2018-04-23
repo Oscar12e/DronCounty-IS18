@@ -1,57 +1,59 @@
 package MVC;
 
 
-import Simulation.DroneController;
-import Simulation.Graph;
-import Simulation.Station;
+import Simulation.*;
 import com.sun.prism.image.Coords;
 
 public class AirTrafficSimulationModel  {
     //private Graph<Station> SimulationGraph = new Graph<>();
 
-    protected int tripsAmount;
-    protected int stationsAmount;
-    protected float simulationTime;
-    protected float simulateHourEquivalentToMiliseconds;
-    protected int arcsPerStation;
+    private int tripsAmount;
+    private int stationsAmount;
+    private float simulationTime;
+    private float simulateHourEquivalentToMiliseconds;
+    private int arcsPerStation;
 
     private DroneController simulator;
+    private Graph stationMap;
 
-    public AirTrafficSimulationModel(int pTripsAmount, int pStationsAmount, float pSimulationTime, int pArcsPerStation){
-        this.tripsAmount = tripsAmount;
-        this.stationsAmount = stationsAmount;
-        this.simulationTime = simulationTime;
-        this.arcsPerStation = arcsPerStation;
+    public AirTrafficSimulationModel(){
     }
 
     public void createGraph(int pNodeQuantity, int pArcsQuantity){
-
+        this.stationMap = null;
     }
 
-    public void defineSimulator(){
+    public void setTripsAmount(int tripsAmount) {
+        this.tripsAmount = tripsAmount;
     }
 
-
-    public int getTripsAmount() {
-        return tripsAmount;
+    public void setStationsAmount(int stationsAmount) {
+        this.stationsAmount = stationsAmount;
     }
 
-    public int getStationsAmount() {
-        return stationsAmount;
+    public void setSimulationTime(float simulationTime) {
+        this.simulationTime = simulationTime;
     }
 
-    public float getSimulationTime() {
-        return simulationTime;
+    public void setSimulateHourEquivalentToMiliseconds(float simulateHourEquivalentToMiliseconds) {
+        this.simulateHourEquivalentToMiliseconds = simulateHourEquivalentToMiliseconds;
     }
 
-    public float getSimulateHourEquivalentToMiliseconds() {
-        return simulateHourEquivalentToMiliseconds;
+    public void setArcsPerStation(int arcsPerStation) {
+        this.arcsPerStation = arcsPerStation;
     }
 
-    public int getArcsPerStation() {
-        return arcsPerStation;
+    public void setSimulator(String simulatorType) {
+        switch (simulatorType) {
+            case "Probabilistico":
+                this.simulator = new ProbabilisticSimulator();
+                break;
+            case "Backtracking":
+                this.simulator = new BacktrackingSimulation();
+                break;
+            default:
+                this.simulator = new DivideConquerSimulator();
+                break;
+        }
     }
-
-
-
 }
