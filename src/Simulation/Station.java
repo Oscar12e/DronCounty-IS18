@@ -10,6 +10,8 @@ public class Station implements Comparable<Station> {
     private int idStation;
     private Hashtable<Integer, ArrayList<Integer>> paths;
     private Hashtable<Integer,Integer> dronesLeft;
+    private Hashtable<Integer, ArrayList<Trip>> schedule;
+
 
     public Station(int quantityDronesTotal, int idStation, Hashtable<Integer,Integer> pDronesLeft) {
         this.totalDronesQuantity = quantityDronesTotal;
