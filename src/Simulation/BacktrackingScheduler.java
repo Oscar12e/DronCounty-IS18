@@ -1,6 +1,6 @@
 package Simulation;
 
-public class ProbabilisticSimulator extends DroneController {
+public class BacktrackingScheduler extends Scheduler {
 
     @Override
     public boolean runSimulation(){

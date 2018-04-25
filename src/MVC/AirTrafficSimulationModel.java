@@ -1,10 +1,7 @@
 package MVC;
 
 
-import Simulation.DroneController;
-import Simulation.Graph;
-import Simulation.Station;
-import com.sun.prism.image.Coords;
+import Simulation.Scheduler;
 
 public class AirTrafficSimulationModel  {
     //private Graph<Station> SimulationGraph = new Graph<>();
@@ -15,7 +12,7 @@ public class AirTrafficSimulationModel  {
     protected float simulateHourEquivalentToMiliseconds;
     protected int arcsPerStation;
 
-    private DroneController simulator;
+    private Scheduler simulator;
 
     public AirTrafficSimulationModel(int pTripsAmount, int pStationsAmount, float pSimulationTime, int pArcsPerStation){
         this.tripsAmount = tripsAmount;

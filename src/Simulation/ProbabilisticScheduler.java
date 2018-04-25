@@ -1,6 +1,6 @@
 package Simulation;
 
-public class DivideConquerSimulator extends DroneController {
+public class ProbabilisticScheduler extends Scheduler {
 
     @Override
     public boolean runSimulation(){

@@ -1,5 +1,6 @@
 package Simulation;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class Station implements Comparable<Station> {
@@ -7,8 +8,10 @@ public class Station implements Comparable<Station> {
     private int totalDronesQuantity;
     private int currentDronesQuantity;
     private int idStation;
-    private Hashtable<Integer,Integer> paths;
+    private Hashtable<Integer,Integer> paths; // highways?
     private Hashtable<Integer,Integer> dronesLeft;
+    private ArrayList<PossibleTrip> possibleTrips; //Usar otra estructura?
+    //private ArrayList<Highway> highways;
 
     public Station(int quantityDronesTotal, int currentDronesQuantity, int idStation) {
         this.totalDronesQuantity = quantityDronesTotal;

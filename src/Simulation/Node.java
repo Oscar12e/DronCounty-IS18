@@ -5,28 +5,18 @@ import java.util.LinkedList;
 
 public class Node<T> {
     private T value;
-    private boolean visited;
     private ArrayList<Arc> arcs;
     private int minDistance;
     private LinkedList<Node> path;
 
     public Node(T value){
         this.value = value;
-        this.visited = false;
         this.arcs = new ArrayList<>();
         this.minDistance = Integer.MAX_VALUE;
     }
 
     public T getValue() {
         return value;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void setVisited(boolean visited) {
-        this.visited = visited;
     }
 
     public ArrayList<Arc> getArcs() {
