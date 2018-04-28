@@ -11,6 +11,9 @@ import java.net.URL;
 public class Main extends Application {
 
     public static void main(String[] args){
+        Simulator s = new Simulator();
+        s.generateNodes(3,1000);
+        s.generateArcs(2);
 
 
         System.out.println("Iniciando aplicación");

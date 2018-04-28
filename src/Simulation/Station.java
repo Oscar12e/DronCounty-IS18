@@ -7,32 +7,38 @@ public class Station implements Comparable<Station> {
 
     private int totalDronesQuantity;
     private int currentDronesQuantity;
-    private int idStation;
+    private char idStation;
     private Hashtable<Integer,Integer> paths; // highways?
     private Hashtable<Integer,Integer> dronesLeft;
-    private ArrayList<PossibleTrip> possibleTrips; //Usar otra estructura?
     //private ArrayList<Highway> highways;
 
-    public Station(int quantityDronesTotal, int currentDronesQuantity, int idStation) {
+    public Station(int quantityDronesTotal, char idStation) {
         this.totalDronesQuantity = quantityDronesTotal;
-        this.currentDronesQuantity = currentDronesQuantity;
         this.idStation = idStation;
     }
 
-    public Station(int idStation) {
+    /*public Station(int idStation) {
         this.idStation = idStation;
         this.paths = new Hashtable<>();
-    }
+    }*/
 
     public int getTotalDronesQuantity() {
         return totalDronesQuantity;
+    }
+
+    public void setTotalDronesQuantity(int totalDronesQuantity) {
+        this.totalDronesQuantity = totalDronesQuantity;
+    }
+
+    public void setCurrentDronesQuantity(int currentDronesQuantity) {
+        this.currentDronesQuantity = currentDronesQuantity;
     }
 
     public int getCurrentDronesQuantity() {
         return currentDronesQuantity;
     }
 
-    public int getIdStation() {
+    public char getIdStation() {
         return idStation;
     }
 

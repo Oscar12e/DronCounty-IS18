@@ -4,12 +4,12 @@ public class Arc {
 
     private int weight;
     private Node destiny;
-    private Highway highway;
+    //private Highway highway;
 
     public Arc(int weight, Node destiny, Highway highway) {
         this.weight = weight;
         this.destiny = destiny;
-        this.highway = highway;
+        //this.highway = highway;
     }
 
     public int getWeight() {
@@ -20,7 +20,7 @@ public class Arc {
         return destiny;
     }
 
-    public Highway getHighway() {
+    /*public Highway getHighway() {
         return highway;
-    }
+    }*/
 }

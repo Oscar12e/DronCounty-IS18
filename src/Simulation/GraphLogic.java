@@ -1,5 +1,6 @@
 package Simulation;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
@@ -24,7 +25,7 @@ public class GraphLogic<T> {
         return false;
     }
 
-    public Node searchVertex(int id){
+    public Node searchVertex(char id){
         for(int i=0; i<graph.getVertexList().size(); i++){
             Station station = (Station) graph.getVertexList().get(i).getValue();
             if (station.getIdStation() == id)
@@ -71,6 +72,24 @@ public class GraphLogic<T> {
         return origin.getPath();
     }
 
+    public ArrayList searchVoidNodes(char key){
+        ArrayList<Node> voidNodes = new ArrayList<>();
+        for(int i=0; i<graph.getVertexList().size(); i++){
+            if(graph.getVertexList().get(i).isVoid() == false && searchVertex(key) != graph.getVertexList().get(i)){
+                voidNodes.add(graph.getVertexList().get(i));
+            }
+        }
+        return voidNodes;
+    }
+
+    public ArrayList searchClosestNodes(Node source, int quantity){
+        ArrayList<Node> closestNodes = new ArrayList<>();
+        for(int i=0; i<quantity; i++){
+            //???????????
+        }
+        return closestNodes;
+    }
+
     public void cleanPaths(){
         for (int i = 0; i<graph.getVertexList().size(); i++){
             graph.getVertexList().get(i).setPath(null);
@@ -82,4 +101,7 @@ public class GraphLogic<T> {
             graph.getVertexList().get(i).setMinDistance(Integer.MAX_VALUE);
         }
     }
+
+    //calcular distancia
+    //Math.hypot(x1 -x2, y1 -y2)
 }

@@ -8,11 +8,15 @@ public class Node<T> {
     private ArrayList<Arc> arcs;
     private int minDistance;
     private LinkedList<Node> path;
+    private boolean isVoid;
+    //For UI
+    private OrderedPair orderedPair;
 
     public Node(T value){
         this.value = value;
         this.arcs = new ArrayList<>();
         this.minDistance = Integer.MAX_VALUE;
+        this.isVoid = false;
     }
 
     public T getValue() {
@@ -37,6 +41,22 @@ public class Node<T> {
 
     public void setPath(LinkedList<Node> path) {
         this.path = path;
+    }
+
+    public boolean isVoid() {
+        return isVoid;
+    }
+
+    public void setVoid(boolean aVoid) {
+        isVoid = aVoid;
+    }
+
+    public OrderedPair getOrderedPair() {
+        return orderedPair;
+    }
+
+    public void setOrderedPair(OrderedPair orderedPair) {
+        this.orderedPair = orderedPair;
     }
 
     public boolean isAdjacentNode(Station value){
