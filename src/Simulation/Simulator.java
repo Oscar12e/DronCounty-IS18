@@ -42,7 +42,7 @@ public class Simulator<T> {
             station.setTotalDronesQuantity(station.getTotalDronesQuantity()*stationsQuantity);
             totalDrones+=station.getTotalDronesQuantity();
             station.setCurrentDronesQuantity(station.getTotalDronesQuantity());
-            System.out.println(station.getTotalDronesQuantity());
+            System.out.println(station.getIdStation() +": "+station.getTotalDronesQuantity());
         }
 
         if(totalDrones>dronesQuantity){
@@ -93,26 +93,40 @@ public class Simulator<T> {
     }
 
     public ArrayList generateMap(int mapSizeX, int mapSizeY){
-        int frameWidth = mapSizeX/30;
-        int frameHeight = mapSizeY/30;
+        int frameWidth = mapSizeX/6;
+        int frameHeight = mapSizeY/5;
         int x = 0;
         int y = 0;
         ArrayList<OrderedPair> possiblePositions = new ArrayList<>();
         //generate grid of possible positions
-        for (int i=0; i<30; i++){
+        for (int i=0; i<6; i++){
             x+=frameWidth;
-            for (int j=0; j<30; j++){
+            for (int j=0; j<5; j++){
                 y+=frameHeight;
                 OrderedPair newPair = new OrderedPair(x,y);
+                //System.out.println(newPair.getX()+" y:"+newPair.getY());
                 possiblePositions.add(newPair);
             }
+            y=0;
         }
         //generate random position based on previous generated grid
         Random random = new Random(System.currentTimeMillis());
         int randomNumber;
+        int randomX;
+        int minX;
+        int randomY;
+        int minY;
         for (int i=0; i<graph.getVertexList().size(); i++){
             randomNumber = random.nextInt(possiblePositions.size());
-            graph.getVertexList().get(i).setOrderedPair(possiblePositions.get(randomNumber));
+            minX = possiblePositions.get(randomNumber).getX()-frameWidth;
+            randomX = random.nextInt((possiblePositions.get(randomNumber).getX()-minX)+1)+minX;
+
+            minY = possiblePositions.get(randomNumber).getY()-frameHeight;
+            randomY = random.nextInt((possiblePositions.get(randomNumber).getY()-minY)+1)+minY;
+
+            OrderedPair orderedPair = new OrderedPair(randomX,randomY);
+            graph.getVertexList().get(i).setOrderedPair(orderedPair);
+            System.out.println("x:"+graph.getVertexList().get(i).getOrderedPair().getX()+" y:"+graph.getVertexList().get(i).getOrderedPair().getY());
             possiblePositions.remove(randomNumber);
         }
         return null;

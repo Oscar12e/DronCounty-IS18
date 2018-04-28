@@ -12,8 +12,9 @@ public class Main extends Application {
 
     public static void main(String[] args){
         Simulator s = new Simulator();
-        s.generateNodes(3,1000);
-        s.generateArcs(2);
+        s.generateNodes(5,1000);
+        //s.generateArcs(2);
+        s.generateMap(150,150);
 
 
         System.out.println("Iniciando aplicación");
