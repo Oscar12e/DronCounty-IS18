@@ -82,6 +82,10 @@ public class GraphLogic<T> {
         return voidNodes;
     }
 
+    public ArrayList checkIfConnectedNode(Node source){
+        return null;
+    }
+
     public ArrayList searchClosestNodes(Node source, int quantity){
         ArrayList<Node> closestNodes = new ArrayList<>();
         for(int i=0; i<quantity; i++){

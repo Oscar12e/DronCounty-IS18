@@ -92,7 +92,7 @@ public class Simulator<T> {
         return true;
     }
 
-    public ArrayList generateMap(int mapSizeX, int mapSizeY){
+    public void generateMap(int mapSizeX, int mapSizeY){
         int frameWidth = mapSizeX/6;
         int frameHeight = mapSizeY/5;
         int x = 0;
@@ -129,8 +129,18 @@ public class Simulator<T> {
             System.out.println("x:"+graph.getVertexList().get(i).getOrderedPair().getX()+" y:"+graph.getVertexList().get(i).getOrderedPair().getY());
             possiblePositions.remove(randomNumber);
         }
-        return null;
     }
 
+    public int calculateTwoNodeDistance(char key1, char key2){
+        Node node1 = graphLogic.searchVertex(key1);
+        Node node2 = graphLogic.searchVertex(key2);
+
+        int result = (int) Math.hypot(node1.getOrderedPair().getX()-node2.getOrderedPair().getX(), node1.getOrderedPair().getY()-node2.getOrderedPair().getY());
+        return result;
+    }
+
+    public ArrayList<Node> getCloserNodes(char key){
+        return null;
+    }
 
 }
