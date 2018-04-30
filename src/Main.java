@@ -25,6 +25,7 @@ public class Main extends Application {
             add(1);
             add(2);
             add(3);
+            add(2,55);
         }};
 
         ArrayList<Integer> listaSimple2 = new ArrayList<Integer>(){{
@@ -34,7 +35,7 @@ public class Main extends Application {
         }};
 
 
-        listaSimple.removeAll(listaSimple2);
+        //listaSimple.removeAll(listaSimple2);
 
         System.out.println(listaSimple);
     }

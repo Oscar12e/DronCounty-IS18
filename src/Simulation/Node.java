@@ -9,6 +9,7 @@ public class Node<T> {
     private int minDistance;
     private LinkedList<Node> path;
     private boolean isVoid;
+    private ArrayList<Node<T>> availableNodes;
     //For UI
     private OrderedPair orderedPair;
 
@@ -59,6 +60,14 @@ public class Node<T> {
         this.orderedPair = orderedPair;
     }
 
+    public ArrayList<Node<T>> getAvailableNodes() {
+        return availableNodes;
+    }
+
+    public void setAvailableNodes(ArrayList<Node<T>> availableNodes) {
+        this.availableNodes = availableNodes;
+    }
+
     public boolean isAdjacentNode(Station value){
         for(int i=0; i<arcs.size(); i++){
             if(arcs.get(i).getDestiny().getValue() == value){//Como getIdStation
@@ -67,6 +76,18 @@ public class Node<T> {
         }
         return false;
     }
-
+/*
+    @Override
+    public int compareTo(Node otherObject) {
+        Station station1 = (Station) this.value;
+        Station station2 = (Station) otherObject.getValue();
+        int difference = station1.getIdStation() - otherObject.getIdStation();
+        if (difference == 0)
+            return 0;
+        else if (difference > 0)
+            return 1;
+        else
+            return -1;
+    }*/
 
 }
