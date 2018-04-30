@@ -1,10 +1,9 @@
 package Simulation;
 
-public class BacktrackingSimulation implements DroneController {
+public class BacktrackingScheduler extends Scheduler {
 
     @Override
     public boolean runSimulation(){
         return false;
     }
-
 }

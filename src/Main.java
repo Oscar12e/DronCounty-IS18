@@ -13,6 +13,12 @@ import java.util.List;
 public class Main extends Application {
 
     public static void main(String[] args){
+        Simulator s = new Simulator();
+        s.generateNodes(5,1000);
+        //s.generateArcs(2);
+        s.generateMap(150,150);
+
+
         System.out.println("Iniciando aplicación");
         launch(args);
         ArrayList<Integer> listaSimple = new ArrayList<Integer>(){{

@@ -5,28 +5,22 @@ import java.util.LinkedList;
 
 public class Node<T> {
     private T value;
-    private boolean visited;
     private ArrayList<Arc> arcs;
     private int minDistance;
     private LinkedList<Node> path;
+    private boolean isVoid;
+    //For UI
+    private OrderedPair orderedPair;
 
     public Node(T value){
         this.value = value;
-        this.visited = false;
         this.arcs = new ArrayList<>();
         this.minDistance = Integer.MAX_VALUE;
+        this.isVoid = false;
     }
 
     public T getValue() {
         return value;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void setVisited(boolean visited) {
-        this.visited = visited;
     }
 
     public ArrayList<Arc> getArcs() {
@@ -47,6 +41,22 @@ public class Node<T> {
 
     public void setPath(LinkedList<Node> path) {
         this.path = path;
+    }
+
+    public boolean isVoid() {
+        return isVoid;
+    }
+
+    public void setVoid(boolean aVoid) {
+        isVoid = aVoid;
+    }
+
+    public OrderedPair getOrderedPair() {
+        return orderedPair;
+    }
+
+    public void setOrderedPair(OrderedPair orderedPair) {
+        this.orderedPair = orderedPair;
     }
 
     public boolean isAdjacentNode(Station value){

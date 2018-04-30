@@ -1,59 +1,54 @@
 package MVC;
 
 
-import Simulation.*;
-import com.sun.prism.image.Coords;
+import Simulation.Scheduler;
 
 public class AirTrafficSimulationModel  {
     //private Graph<Station> SimulationGraph = new Graph<>();
 
-    private int tripsAmount;
-    private int stationsAmount;
-    private float simulationTime;
-    private float simulateHourEquivalentToMiliseconds;
-    private int arcsPerStation;
+    protected int tripsAmount;
+    protected int stationsAmount;
+    protected float simulationTime;
+    protected float simulateHourEquivalentToMiliseconds;
+    protected int arcsPerStation;
 
-    private DroneController simulator;
-    private Graph stationMap;
+    private Scheduler simulator;
 
-    public AirTrafficSimulationModel(){
-    }
-
-    public void createGraph(int pNodeQuantity, int pArcsQuantity){
-        this.stationMap = null;
-    }
-
-    public void setTripsAmount(int tripsAmount) {
+    public AirTrafficSimulationModel(int pTripsAmount, int pStationsAmount, float pSimulationTime, int pArcsPerStation){
         this.tripsAmount = tripsAmount;
-    }
-
-    public void setStationsAmount(int stationsAmount) {
         this.stationsAmount = stationsAmount;
-    }
-
-    public void setSimulationTime(float simulationTime) {
         this.simulationTime = simulationTime;
-    }
-
-    public void setSimulateHourEquivalentToMiliseconds(float simulateHourEquivalentToMiliseconds) {
-        this.simulateHourEquivalentToMiliseconds = simulateHourEquivalentToMiliseconds;
-    }
-
-    public void setArcsPerStation(int arcsPerStation) {
         this.arcsPerStation = arcsPerStation;
     }
 
-    public void setSimulator(String simulatorType) {
-        switch (simulatorType) {
-            case "Probabilistico":
-                this.simulator = new ProbabilisticSimulator();
-                break;
-            case "Backtracking":
-                this.simulator = new BacktrackingSimulation();
-                break;
-            default:
-                this.simulator = new DivideConquerSimulator();
-                break;
-        }
+    public void createGraph(int pNodeQuantity, int pArcsQuantity){
+
     }
+
+    public void defineSimulator(){
+    }
+
+
+    public int getTripsAmount() {
+        return tripsAmount;
+    }
+
+    public int getStationsAmount() {
+        return stationsAmount;
+    }
+
+    public float getSimulationTime() {
+        return simulationTime;
+    }
+
+    public float getSimulateHourEquivalentToMiliseconds() {
+        return simulateHourEquivalentToMiliseconds;
+    }
+
+    public int getArcsPerStation() {
+        return arcsPerStation;
+    }
+
+
+
 }
