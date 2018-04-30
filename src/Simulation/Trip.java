@@ -1,48 +1,36 @@
 package Simulation;
 
 public class Trip {
+    static private int maxDronesPerTrip;
+    static private final int HEIGHT = 1000; //meters - Deberia ir en cosntants
 
-    private DroneMeasure drone;
+
+    private static DroneMeasure drone;
     private int dronesQuantity;
-    private Station stationA;
-    private Station stationB;
-    private int tripTime;
-    private int startTime;
+    private Station destinyStationID;
+
 
     public Trip(Station stationA, Station stationB, int cantDrones, int tripTime, int startTime) {
         this.drone =  DroneMeasure.getInstance();
-        this.stationA = stationA;
-        this.stationB = stationB;
+        this.destinyStationID = stationB;
         this.dronesQuantity = cantDrones;
-        this.tripTime = tripTime;
-        this.startTime = startTime;
     }
 
     public DroneMeasure getDrone() {
         return drone;
     }
 
-    public Station getStationA() {
-        return stationA;
-    }
-
     public Station getStationB() {
-        return stationB;
+        return destinyStationID;
     }
 
     public int getDronesQuantity() {
         return dronesQuantity;
     }
 
-    public int getTripTime() {
-        return tripTime;
+
+    public static void setMaxDronesPerTrip(int pWidth){ //Width siempre sera mayor o igual al ancho de dos drones
+        maxDronesPerTrip = (pWidth/2 * HEIGHT) / (drone.getWIDTH()); 	//Ancho divido entre dos (variable) por altura (constante)
     }
 
-    public int getStartTime() {
-        return startTime;
-    }
-
-    public int calcularTiempo() {
-        return 2;
-    }
 }
