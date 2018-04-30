@@ -41,6 +41,7 @@ public class GraphLogic<T> {
         if(source != null && destiny != null){
             Arc newArc = new Arc(weight, destiny); //corregir highway con funcion de buscar
             source.getArcs().add(newArc);
+            source.getAvailableNodes().remove(destiny); //ok?
             return true;
         }
         return false;

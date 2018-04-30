@@ -1,6 +1,7 @@
 package Simulation;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Simulator<T> {
@@ -50,6 +51,11 @@ public class Simulator<T> {
             station.setTotalDronesQuantity(station.getTotalDronesQuantity()-(totalDrones-dronesQuantity));
             station.setCurrentDronesQuantity(station.getTotalDronesQuantity());
         }
+
+        //Clone the content of graph.VertexList to each Node.availableNodes
+        for (int i=0; i<stationsQuantity; i++){
+            graph.getVertexList().get(i).setAvailableNodes(new ArrayList<>(graph.getVertexList()));
+        }
 /*
         for(int i=0; i<stationsQuantity-1; i++){
             percentage = random.nextInt(100);
@@ -75,6 +81,8 @@ public class Simulator<T> {
             Node sourceStation = graphLogic.searchVertex(station.getIdStation());
             Random random = new Random(System.currentTimeMillis());
             int randomId;
+            int arcsLeft = 0;
+            ArrayList<Node> closerNodes = null;
             for(int j=0; j<arcsPerStation; j++) {
                 ArrayList<Node> voidNodes = graphLogic.searchVoidNodes(station.getIdStation());
                 if (voidNodes != null) {
@@ -86,6 +94,15 @@ public class Simulator<T> {
                 }
                 else {
                     //Entre estaciones mas cercanas
+                    arcsLeft = arcsPerStation-j;
+                    closerNodes = getCloserNodes(station.getIdStation());
+                    break;
+                }
+            }
+            if(arcsLeft != 0) {
+                for (int j = 0; j < arcsLeft; j++) {
+                    int randomWeight = random.nextInt(1000); //usar funcion de distancias
+                    graphLogic.insertArc(sourceStation, closerNodes.remove(i), randomWeight);
                 }
             }
         }
@@ -131,16 +148,27 @@ public class Simulator<T> {
         }
     }
 
-    public int calculateTwoNodeDistance(char key1, char key2){
-        Node node1 = graphLogic.searchVertex(key1);
-        Node node2 = graphLogic.searchVertex(key2);
+    public int calculateTwoNodeDistance(Node<T> node1, Node<T> node2){
+        //Node node1 = graphLogic.searchVertex(key1);
+        //Node node2 = graphLogic.searchVertex(key2);
 
         int result = (int) Math.hypot(node1.getOrderedPair().getX()-node2.getOrderedPair().getX(), node1.getOrderedPair().getY()-node2.getOrderedPair().getY());
         return result;
     }
 
     public ArrayList<Node> getCloserNodes(char key){
-        return null;
+        ArrayList<Node> closerNodes = new ArrayList<>();
+        Node<T> source = graphLogic.searchVertex(key);
+        for (int i=0; i<source.getAvailableNodes().size(); i++){
+            if(closerNodes==null)
+                closerNodes.add(source.getAvailableNodes().get(i));
+            else if(calculateTwoNodeDistance(source, source.getAvailableNodes().get(i)) < calculateTwoNodeDistance(source, source.getAvailableNodes().get(i))){
+                closerNodes.add(i-1, source.getAvailableNodes().get(i));
+            }
+            else
+                closerNodes.add(source.getAvailableNodes().get(i));
+        }
+        return closerNodes;
     }
 
 }
