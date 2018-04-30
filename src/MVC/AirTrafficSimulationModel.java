@@ -6,19 +6,23 @@ import Simulation.Scheduler;
 public class AirTrafficSimulationModel  {
     //private Graph<Station> SimulationGraph = new Graph<>();
 
-    protected int tripsAmount;
-    protected int stationsAmount;
-    protected float simulationTime;
-    protected float simulateHourEquivalentToMiliseconds;
-    protected int arcsPerStation;
+    private int tripsAmount;
+    private int stationsAmount;
+    private float simulationTime;
+    private float simulateHourEquivalentToMiliseconds;
+    private int arcsPerStation;
 
     private Scheduler simulator;
 
+    public AirTrafficSimulationModel(){
+
+    }
+
     public AirTrafficSimulationModel(int pTripsAmount, int pStationsAmount, float pSimulationTime, int pArcsPerStation){
-        this.tripsAmount = tripsAmount;
-        this.stationsAmount = stationsAmount;
-        this.simulationTime = simulationTime;
-        this.arcsPerStation = arcsPerStation;
+        this.tripsAmount = pTripsAmount;
+        this.stationsAmount = pStationsAmount;
+        this.simulationTime = pSimulationTime;
+        this.arcsPerStation = pArcsPerStation;
     }
 
     public void createGraph(int pNodeQuantity, int pArcsQuantity){
@@ -29,26 +33,27 @@ public class AirTrafficSimulationModel  {
     }
 
 
-    public int getTripsAmount() {
-        return tripsAmount;
+    public void setTripsAmount(int tripsAmount) {
+        this.tripsAmount = tripsAmount;
     }
 
-    public int getStationsAmount() {
-        return stationsAmount;
+    public void setStationsAmount(int stationsAmount) {
+        this.stationsAmount = stationsAmount;
     }
 
-    public float getSimulationTime() {
-        return simulationTime;
+    public void setSimulationTime(float simulationTime) {
+        this.simulationTime = simulationTime;
     }
 
-    public float getSimulateHourEquivalentToMiliseconds() {
-        return simulateHourEquivalentToMiliseconds;
+    public void setSimulateHourEquivalentToMiliseconds(float simulateHourEquivalentToMiliseconds) {
+        this.simulateHourEquivalentToMiliseconds = simulateHourEquivalentToMiliseconds;
     }
 
-    public int getArcsPerStation() {
-        return arcsPerStation;
+    public void setArcsPerStation(int arcsPerStation) {
+        this.arcsPerStation = arcsPerStation;
     }
 
-
-
+    public void setSimulator(String simulator) {
+        //this.simulator = simulator;
+    }
 }

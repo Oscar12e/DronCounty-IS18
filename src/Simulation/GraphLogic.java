@@ -39,7 +39,7 @@ public class GraphLogic<T> {
         //Node destinyVertex = searchVertex(destiny);
 
         if(source != null && destiny != null){
-            Arc newArc = new Arc(weight, destiny, null); //corregir highway con funcion de buscar
+            Arc newArc = new Arc(weight, destiny); //corregir highway con funcion de buscar
             source.getArcs().add(newArc);
             return true;
         }

@@ -21,7 +21,7 @@ public class Station implements Comparable<Station> {
         this.currentDronesQuantity = quantityDronesTotal;
     }
 
-    public Station(char pIdStation) {
+    public Station(int ask, char pIdStation) {
         this.idStation = pIdStation;
         this.paths = new Hashtable<>();
     }
