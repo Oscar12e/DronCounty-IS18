@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main extends Application {
@@ -13,7 +15,22 @@ public class Main extends Application {
     public static void main(String[] args){
         System.out.println("Iniciando aplicación");
         launch(args);
-        Trip trip;
+        ArrayList<Integer> listaSimple = new ArrayList<Integer>(){{
+            add(1);
+            add(2);
+            add(3);
+        }};
+
+        ArrayList<Integer> listaSimple2 = new ArrayList<Integer>(){{
+            add(3);
+            add(4);
+            add(5);
+        }};
+
+
+        listaSimple.removeAll(listaSimple2);
+
+        System.out.println(listaSimple);
     }
 
     @Override
