@@ -15,7 +15,6 @@ public class AirTrafficSimulationController  implements Initializable {
     @FXML private ToggleGroup algorithmSelection;
     @FXML private Spinner<Integer> SB_stationQuantity;
     @FXML private Spinner<Integer> SB_tripsQuantity;
-    @FXML private Spinner<Integer> SB_heightMeasure;
     @FXML private Spinner<Integer> SB_widthMeasure;
     @FXML private Spinner<Integer> SB_arcsQuantity;
     @FXML private Spinner<Integer> SB_hourEquivalent;
@@ -50,7 +49,6 @@ public class AirTrafficSimulationController  implements Initializable {
         theModel.setSimulator(selectedButton.getText());
 
         BTN_startSimulation.setDisable(false);
-
     }
 
 

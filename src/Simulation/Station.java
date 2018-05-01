@@ -9,6 +9,7 @@ public class Station implements Comparable<Station> {
     private int totalDronesQuantity;
     private int currentDronesQuantity;
     private char idStation;
+
     private List<Character> destinyStations;
 
     private Hashtable<Integer, ArrayList<Integer>> paths;

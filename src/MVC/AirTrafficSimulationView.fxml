@@ -15,37 +15,34 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="520.0">
                <children>
 
-                  <Label layoutX="25.0" layoutY="15.0" prefHeight="25.0" text="Cantidad de estaciones: " />
-                   <Spinner fx:id="SB_stationQuantity" editable="true" layoutX="155.0" layoutY="15.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+                  <Label layoutX="10.0" layoutY="14.0" prefHeight="25.0" text="Estaciones: " />
+                   <Spinner fx:id="SB_stationQuantity" editable="true" layoutX="75.0" layoutY="14.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
 
-                   <Label layoutX="25.0" layoutY="50.0" prefHeight="25.0" text="Cantidad de viajes:" />
-                   <Spinner fx:id="SB_tripsQuantity" editable="true" layoutX="155.0" layoutY="50.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+                   <Label layoutX="274.0" layoutY="14.0" prefHeight="25.0" text="Cantidad de viajes:" />
+                   <Spinner fx:id="SB_tripsQuantity" editable="true" layoutX="388.0" layoutY="14.0" max="1000000" min="1" prefHeight="25.0" prefWidth="122.0" />
 
-                  <Label layoutX="50.0" layoutY="83.0" prefHeight="25.0" text="Dimensiones de las pistas (km)" />
-                   <Label layoutX="250.0" layoutY="85.0" prefHeight="25.0" text="Alto:" />
-                   <Spinner fx:id="SB_heightMeasure" editable="true" layoutX="290.0" layoutY="85.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
-                   <Label layoutX="400.0" layoutY="85.0" prefHeight="25.0" text="Ancho:" />
-                   <Spinner fx:id="SB_widthMeasure" editable="true" layoutX="440.0" layoutY="85.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+                  <Label layoutX="34.0" layoutY="55.0" prefHeight="25.0" text="Ancho de las pistas:" />
+                   <Spinner fx:id="SB_widthMeasure" amountToStepBy="5" editable="true" layoutX="146.0" layoutY="55.0" max="5000" min="5" prefHeight="25.0" prefWidth="75.0" />
 
 
-                   <Label layoutX="275.0" layoutY="15.0" prefHeight="25.0" text="Arcos por cada estación: " />
-                   <Spinner fx:id="SB_arcsQuantity" editable="true" layoutX="430.0" layoutY="10.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+                   <Label layoutX="154.0" layoutY="14.0" prefHeight="25.0" text="Arcos: " />
+                   <Spinner fx:id="SB_arcsQuantity" editable="true" layoutX="190.0" layoutY="14.0" max="29" min="1" prefHeight="25.0" prefWidth="55.0" />
 
-                  <Label layoutX="275.0" layoutY="50.0" prefHeight="25.0" text="Hora simulada en segundos: " />
-                   <Spinner fx:id="SB_hourEquivalent" editable="true" layoutX="430.0" layoutY="50.0" max="30" min="1" prefHeight="25.0" prefWidth="55.0" />
+                  <Label layoutX="234.0" layoutY="55.0" prefHeight="25.0" text="Horas representadas por segundo:" />
+                   <Spinner fx:id="SB_hourEquivalent" editable="true" layoutX="421.0" layoutY="55.0" max="200" min="1" prefHeight="25.0" prefWidth="85.0" />
 
 
 
-                   <Label layoutX="20.0" layoutY="135.0" prefHeight="25.0" text="Tiempo estimado: (Calculando)" />
-                  <RadioButton fx:id="RB_Backtracking" layoutX="139.0" layoutY="119.0" mnemonicParsing="false" selected="true" text="Backtracking">
+                   <Label layoutX="5.0" layoutY="119.0" prefHeight="25.0" text="Tiempo estimado: (Calculando)" />
+                  <RadioButton fx:id="RB_Backtracking" layoutX="130.0" layoutY="89.0" mnemonicParsing="false" selected="true" text="Backtracking">
                      <toggleGroup>
                         <ToggleGroup fx:id="algorithmSelection" />
                      </toggleGroup></RadioButton>
-                  <RadioButton fx:id="RB_Probabilistic" layoutX="247.0" layoutY="119.0" mnemonicParsing="false" text="Probabilistico" toggleGroup="$algorithmSelection" />
-                  <RadioButton fx:id="RB_Heuristic" layoutX="357.0" layoutY="119.0" mnemonicParsing="false" text="Heuristico" toggleGroup="$algorithmSelection" />
-                  <Label layoutX="47.0" layoutY="119.0" text="Algotitmo:" />
-                  <Button fx:id="BTN_startSimulation" disable="true" layoutX="383.0" layoutY="135.0" mnemonicParsing="false" onAction="#startSimulation" text="Iniciar simulacion" />
-                  <Button layoutX="241.0" layoutY="135.0" mnemonicParsing="false" onAction="#setSimulationParameters" text="Guardar parametros" />
+                  <RadioButton fx:id="RB_Probabilistic" layoutX="238.0" layoutY="89.0" mnemonicParsing="false" text="Probabilistico" toggleGroup="$algorithmSelection" />
+                  <RadioButton fx:id="RB_Heuristic" layoutX="348.0" layoutY="89.0" mnemonicParsing="false" text="Heuristico" toggleGroup="$algorithmSelection" />
+                  <Label layoutX="47.0" layoutY="89.0" text="Algotitmo:" />
+                  <Button fx:id="BTN_startSimulation" disable="true" layoutX="395.0" layoutY="119.0" mnemonicParsing="false" onAction="#startSimulation" text="Iniciar simulacion" />
+                  <Button layoutX="245.0" layoutY="119.0" mnemonicParsing="false" onAction="#setSimulationParameters" text="Guardar parametros" />
 
                </children></AnchorPane>
         </content>

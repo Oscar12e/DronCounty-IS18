@@ -14,22 +14,9 @@ public class AirTrafficSimulationModel  {
 
     private Scheduler simulator;
 
-    public AirTrafficSimulationModel(){
-
-    }
-
-    public AirTrafficSimulationModel(int pTripsAmount, int pStationsAmount, float pSimulationTime, int pArcsPerStation){
-        this.tripsAmount = pTripsAmount;
-        this.stationsAmount = pStationsAmount;
-        this.simulationTime = pSimulationTime;
-        this.arcsPerStation = pArcsPerStation;
-    }
 
     public void createGraph(int pNodeQuantity, int pArcsQuantity){
 
-    }
-
-    public void defineSimulator(){
     }
 
 
@@ -54,6 +41,13 @@ public class AirTrafficSimulationModel  {
     }
 
     public void setSimulator(String simulator) {
+        if (simulator.compareTo("Backtracking") == 0)
+            System.out.println(simulator);
+        else if (simulator.compareTo("Probabilistico") == 0)
+            System.out.println(simulator);
+        else
+            System.out.println(simulator);
+
         //this.simulator = simulator;
     }
 }
