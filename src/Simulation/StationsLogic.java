@@ -11,96 +11,92 @@ import java.util.List;
 public class StationsLogic {
     private Hashtable<Character, Station> stationsToControl;
 
-    private Hashtable <String, Hashtable < Character, Hashtable < Character, Integer > > > differenceOfTime;
-    private Hashtable <String, Hashtable< String, ArrayList<Integer> >> travelingTimePerStation;
-    private Hashtable <Character, ArrayList<Trip> > pendingTripsPerStation;
-    private Hashtable <String, String> arrivalPortPerTrip;
+    private Hashtable <String, Hashtable < Character, Hashtable < Character, Integer > > > departureTimeDifferenceNeed;
+    private Hashtable <String, Hashtable< String, ArrayList<Integer> >> travelingTimePerStation; //Not so useful, now that i think about it
+
+    private Hashtable <Character, Hashtable< Character, List <Integer> >> avaibleDepartureTimes; //Only need it to make calculos
+
 
     /**
-     * @param pRouteId String witch the code 'Station of departure' plus 'Station of arrival'
+     * @param pDepartureStation Char witch the id ot the 'Station of departure'
+     * @param pDestinyStation Char with the id of the 'Station of arrival'
      * @param pSecondDeparture Integer with the second select for the departure of the trip
      * This method makes an update based on the router indicated by pRouteId in time indicated by pSecondDeparture.
     */
-    public void updateDepartureTime(String pRouteId, int pSecondDeparture){
+    public void updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
         //Creates a hash with the conflicting trips of other stations, based on where is the trip starting and where is going
-        Hashtable < Character, Hashtable < Character, Integer > > stationsToUpdate =  this.differenceOfTime.get(pRouteId);
+        Hashtable < Character, Hashtable < Character, Integer > > stationsToUpdate =  this.departureTimeDifferenceNeed.get(new StringBuilder().append(pDepartureStation).append(pDestinyStation).toString());
 
-        //Takes the idCode for every Station that cause conflicts
+        //Takes the idCode for every Station with trips that cause conflicts
         for (char conflictingStationID : stationsToUpdate.keySet()){
-            Station conflictingStation = stationsToControl.get(conflictingStationID); //Gets the station to use update its data
+            //Gets a hash with 'K': Destiny V: 'ArrayList of departure times'
 
-            Hashtable < Character, Integer > conflictingRoutes = stationsToUpdate.get(conflictingStationID); //Hash with all the routes that creates problems
+            Hashtable <Character, List <Integer> > departureTimesToUpdate = avaibleDepartureTimes.get(conflictingStationID); //stationsToControl.get(conflictingStationID).getAvaibleDepartureTimes();
+            //Gets a hash with 'K': Destiny V: 'update to be make'
+            Hashtable <Character, Integer> timeUpdatePerDestiny = stationsToUpdate.get(conflictingStationID);
 
-            //List of time that has to be updated per stations destinies
-            Hashtable <Character, ArrayList <Integer> > departureTimeToUpdate = conflictingStation.getDepartureTime();
+            //Each destiny of the conflicting station its checked
+            for (char conflictingDestiny: timeUpdatePerDestiny.keySet()){
+                int conflictTimeBegin = timeUpdatePerDestiny.get(conflictingDestiny) + pSecondDeparture;
+                //All departure between this last values will definitely cause a collision
 
-            //Each destiny station of the conflicting station its checked
-            for (char conflictingDestiny: conflictingRoutes.keySet()){
-                //Gets the time of departure to the conflicting station
-                List<Integer> conflictingDepartureTime = departureTimeToUpdate.get(conflictingDestiny);
+                List<Integer> departureTimes = departureTimesToUpdate.get(conflictingDestiny);
+                int current = 0;
 
-                //Here we erase all the times that will definitely cause a collision
-                if (arrivalPortPerTrip.get(pRouteId).compareTo(new StringBuilder().append(conflictingStationID).append(conflictingDestiny).toString()) == 0)
-                    conflictingDepartureTime = eraseConflictingTimesOnLanding(conflictingDepartureTime, pSecondDeparture);
-                else
-                    conflictingDepartureTime = eraseConflictingTimesOnPassing(conflictingDepartureTime, pSecondDeparture);
+                //Checks all times till finding a time that cause problems
+                while (current < departureTimes.size()) {
+                    if (conflictTimeBegin <= departureTimes.get(current) + 29)
+                        break;
+                    current++;
+                }
 
-                //Saves the departure time
-                departureTimeToUpdate.put(conflictingDestiny, (ArrayList<Integer>) conflictingDepartureTime);
+                //Gets the value that has to be add to make sure no collision will happen
+                int update = conflictTimeBegin - departureTimes.get(current) + 1;
+                while (current < departureTimes.size()) {
+                    departureTimes.set(current, departureTimes.get(current) + update);
+                    current++;
+                }
+
+                //Saves the new list
+                departureTimesToUpdate.replace(conflictingDestiny, departureTimes);
             }
         }
     }
 
-    /**
-     *
-     * @param departureTimeList List of departure time from a station that may cause conflicting with te actual trip
-     * @param pSec Second in which the trip is leaving its station.
-     * @return List modified
-     * This method makes one call to the Utilitarian method closestLowerNumber, for passingTime. So conflicting times can
-     * be erase it. Then updates the rest.
-     */
-    private List<Integer> eraseConflictingTimesOnLanding(List<Integer> departureTimeList, int pSec) {
-        int updateValue = pSec - Utilitarian.closestLowerNumber(departureTimeList, pSec + 29);
+    /*
+    public void test (){
+        for (char currentStationID: stationsToControl.keySet()){
+            Station currentStation = stationsToControl.get(currentStationID);
 
-        int closestNextDeparture = Utilitarian.closestLowerNumber(departureTimeList, pSec + 29);
+            Hashtable<Character, String> currentPaths = currentStation.getPaths();
 
-        if (Math.abs(pSec - closestNextDeparture) < 30 )
-            departureTimeList.remove(closestNextDeparture);
+            currentStation.getTimeDistance();
 
-        departureTimeList.remove(Utilitarian.closestLowerNumber(departureTimeList, pSec));
+        }
+    }
+    */
 
-        if (updateValue < 30)
-            for (int current = 0; current < departureTimeList.size(); current++){
-                if (pSec <= departureTimeList.get(current))
-                    departureTimeList.set(current, departureTimeList.get(current) + updateValue);
-            }
-        return departureTimeList;
+    public Hashtable<Character, Station> getStationsToControl() {
+        return stationsToControl;
     }
 
-    /**
-     *
-     * @param departureTimeList List of departure time from a station that may cause conflicting with te actual trip
-     * @param pSec Second in which the trip is leaving its station.
-     * @return List modified
-     * This method makes too calls to the Utilitarian method closestLowerNumber, arrivalTime and landingTime respectably
-     */
-    private List<Integer> eraseConflictingTimesOnPassing(List<Integer> departureTimeList, int pSec) {
-        //Takes the closest number for the next
-        int updateValue = pSec - Utilitarian.closestLowerNumber(departureTimeList, pSec + 29) + 1;
-        int closestDeparture = Utilitarian.closestLowerNumber(departureTimeList, pSec);
-
-        if (Math.abs(pSec - closestDeparture) < 30 )
-            departureTimeList.remove(closestDeparture);
-
-            departureTimeList.remove(Utilitarian.closestLowerNumber(departureTimeList, pSec));
-
-        if (updateValue < 30)
-            for (int current = 0; current < departureTimeList.size(); current++){
-                if (pSec <= departureTimeList.get(current))
-                    departureTimeList.set(current, departureTimeList.get(current) + updateValue);
-            }
-        return departureTimeList;
+    public void setStationsToControl(Hashtable<Character, Station> stationsToControl) {
+        this.stationsToControl = stationsToControl;
     }
 
+    public Hashtable<String, Hashtable<Character, Hashtable<Character, Integer>>> getDepartureTimeDifferenceNeed() {
+        return departureTimeDifferenceNeed;
+    }
 
+    public void setDepartureTimeDifferenceNeed(Hashtable<String, Hashtable<Character, Hashtable<Character, Integer>>> departureTimeDifferenceNeed) {
+        this.departureTimeDifferenceNeed = departureTimeDifferenceNeed;
+    }
+
+    public Hashtable<String, Hashtable<String, ArrayList<Integer>>> getTravelingTimePerStation() {
+        return travelingTimePerStation;
+    }
+
+    public void setTravelingTimePerStation(Hashtable<String, Hashtable<String, ArrayList<Integer>>> travelingTimePerStation) {
+        this.travelingTimePerStation = travelingTimePerStation;
+    }
 }

@@ -11,11 +11,10 @@ public class Station implements Comparable<Station> {
     private char idStation;
 
     private List<Character> destinyStations;
-
-    private Hashtable<Integer, ArrayList<Integer>> paths;
+    private Hashtable<Character, String > paths;
     private Hashtable <Integer, ArrayList <Trip> > schedule;
-    private Hashtable <Character, ArrayList <Integer> > departureTime;
-
+    private Hashtable <Character, Integer> timeDistance;
+    private Hashtable <Character, ArrayList<Trip> > tripsToShechedule;
 
     public Station(int quantityDronesTotal, int idStation, Hashtable<Integer,Integer> pDronesLeft) {
         this.totalDronesQuantity = quantityDronesTotal;
@@ -25,6 +24,16 @@ public class Station implements Comparable<Station> {
     public Station(int ask, char pIdStation) {
         this.idStation = pIdStation;
         this.paths = new Hashtable<>();
+    }
+
+    public Station(char pIdStation, Hashtable<Character, String > pPaths, Hashtable <Character, Integer> pTimeDistance) {
+        this.idStation = pIdStation;
+        this.paths = pPaths;
+        this.timeDistance = pTimeDistance;
+    }
+
+    public Station(){
+
     }
 
     public int getTotalDronesQuantity() {
@@ -59,11 +68,11 @@ public class Station implements Comparable<Station> {
         this.destinyStations = destinyStations;
     }
 
-    public Hashtable<Integer, ArrayList<Integer>> getPaths() {
+    public Hashtable<Character, String> getPaths() {
         return paths;
     }
 
-    public void setPaths(Hashtable<Integer, ArrayList<Integer>> paths) {
+    public void setPaths(Hashtable<Character, String > paths) {
         this.paths = paths;
     }
 
@@ -75,12 +84,24 @@ public class Station implements Comparable<Station> {
         this.schedule = schedule;
     }
 
-    public Hashtable<Character, ArrayList<Integer>> getDepartureTime() {
-        return departureTime;
+
+
+
+    public Hashtable<Character, Integer> getTimeDistance() {
+        return timeDistance;
     }
 
-    public void setDepartureTime(Hashtable<Character, ArrayList<Integer>> departureTime) {
-        this.departureTime = departureTime;
+    public void setTimeDistance(Hashtable<Character, Integer> timeDistance) {
+        this.timeDistance = timeDistance;
+    }
+
+
+    public Hashtable<Character, ArrayList<Trip>> getTripsToShechedule() {
+        return tripsToShechedule;
+    }
+
+    public void setTripsToShechedule(Hashtable<Character, ArrayList<Trip>> tripsToShechedule) {
+        this.tripsToShechedule = tripsToShechedule;
     }
 
     @Override
