@@ -15,10 +15,11 @@ public class Main extends Application {
     public static void main(String[] args){
         Simulator s = new Simulator();
         s.generateNodes(5,1000);
-        //s.generateArcs(2);
-        s.generateMap(150,150);
+        s.generateMap(500,500);
+        s.generateArcs(5);
+        s.printInfo();
 
-
+/*
         System.out.println("Iniciando aplicación");
         launch(args);
         ArrayList<Integer> listaSimple = new ArrayList<Integer>(){{
@@ -37,7 +38,7 @@ public class Main extends Application {
 
         //listaSimple.removeAll(listaSimple2);
 
-        System.out.println(listaSimple);
+        System.out.println(listaSimple);*/
     }
 
     @Override

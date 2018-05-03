@@ -17,7 +17,7 @@ public class Node<T> {
         this.value = value;
         this.arcs = new ArrayList<>();
         this.minDistance = Integer.MAX_VALUE;
-        this.isVoid = false;
+        this.isVoid = true;
     }
 
     public T getValue() {

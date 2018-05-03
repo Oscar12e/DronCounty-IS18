@@ -41,7 +41,9 @@ public class GraphLogic<T> {
         if(source != null && destiny != null){
             Arc newArc = new Arc(weight, destiny); //corregir highway con funcion de buscar
             source.getArcs().add(newArc);
+            destiny.setVoid(false);
             source.getAvailableNodes().remove(destiny); //ok?
+            //System.out.println(source.getAvailableNodes());
             return true;
         }
         return false;
@@ -76,7 +78,7 @@ public class GraphLogic<T> {
     public ArrayList searchVoidNodes(char key){
         ArrayList<Node> voidNodes = new ArrayList<>();
         for(int i=0; i<graph.getVertexList().size(); i++){
-            if(graph.getVertexList().get(i).isVoid() == false && searchVertex(key) != graph.getVertexList().get(i)){
+            if(graph.getVertexList().get(i).isVoid() == true && searchVertex(key) != graph.getVertexList().get(i)){
                 voidNodes.add(graph.getVertexList().get(i));
             }
         }
