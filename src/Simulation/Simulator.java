@@ -55,6 +55,7 @@ public class Simulator<T> {
         //Clone the content of graph.VertexList to each Node.availableNodes
         for (int i=0; i<stationsQuantity; i++){
             graph.getVertexList().get(i).setAvailableNodes(new ArrayList<>(graph.getVertexList()));
+            graph.getVertexList().get(i).getAvailableNodes().remove(i);
         }
 /*
         for(int i=0; i<stationsQuantity-1; i++){
@@ -73,6 +74,8 @@ public class Simulator<T> {
     }
 
     public boolean generateArcs(int arcsPerStation){
+        if(arcsPerStation>=graph.getVertexList().size())
+            arcsPerStation=graph.getVertexList().size()-1;
         if (graph.getVertexList().size()<arcsPerStation)
             return false;
         Station station;
@@ -84,25 +87,28 @@ public class Simulator<T> {
             int arcsLeft = 0;
             ArrayList<Node> closerNodes = null;
             for(int j=0; j<arcsPerStation; j++) {
+                //System.out.println(j);
                 ArrayList<Node> voidNodes = graphLogic.searchVoidNodes(station.getIdStation());
-                if (voidNodes != null) {
+                if (voidNodes.size()>0) {
+                    //System.out.println(voidNodes.size());
                     randomId = random.nextInt(voidNodes.size());
-                    int randomWeight = random.nextInt(1000);
                     Node chosenStation = voidNodes.get(randomId);
-                    graphLogic.insertArc(sourceStation, chosenStation, randomWeight);
+                    int weight = calculateTwoNodeDistance(chosenStation, sourceStation);
+                    graphLogic.insertArc(sourceStation, chosenStation, weight);
                     //System.out.println(chosenStation.getArcs());
                 }
                 else {
                     //Entre estaciones mas cercanas
                     arcsLeft = arcsPerStation-j;
-                    closerNodes = getCloserNodes(station.getIdStation());
+                    closerNodes = getCloserNodes(sourceStation);
                     break;
                 }
             }
-            if(arcsLeft != 0) {
+            if(arcsLeft != 0 && closerNodes.size()!=0) {
                 for (int j = 0; j < arcsLeft; j++) {
-                    int randomWeight = random.nextInt(1000); //usar funcion de distancias
-                    graphLogic.insertArc(sourceStation, closerNodes.remove(i), randomWeight);
+                    //System.out.println(j);
+                    int weight = calculateTwoNodeDistance(sourceStation, closerNodes.get(0));
+                    graphLogic.insertArc(sourceStation, closerNodes.remove(0), weight);
                 }
             }
         }
@@ -156,9 +162,11 @@ public class Simulator<T> {
         return result;
     }
 
-    public ArrayList<Node> getCloserNodes(char key){
-        ArrayList<Node> closerNodes = new ArrayList<>();
-        Node<T> source = graphLogic.searchVertex(key);
+    public ArrayList<Node<T>> getCloserNodes(Node<T> source){
+        ArrayList<Node<T>> closerNodes = new ArrayList<>();
+        if(source.getAvailableNodes().size() == 0){
+            return closerNodes;
+        }
         for (int i=0; i<source.getAvailableNodes().size(); i++){
             if(closerNodes==null)
                 closerNodes.add(source.getAvailableNodes().get(i));
@@ -169,6 +177,18 @@ public class Simulator<T> {
                 closerNodes.add(source.getAvailableNodes().get(i));
         }
         return closerNodes;
+    }
+
+    public void printInfo(){
+        Station station;
+        for (int i=0; i<graph.getVertexList().size(); i++){
+            station = (Station) graph.getVertexList().get(i).getValue();
+            System.out.println("Station: "+ station.getIdStation()+"    Arcs: ");
+            for (int j=0; j<graph.getVertexList().get(i).getArcs().size(); j++){
+                Station s = (Station) graph.getVertexList().get(i).getArcs().get(j).getDestiny().getValue();
+                System.out.println(graph.getVertexList().get(i).getArcs().get(j).getWeight() + " to station: "+ s.getIdStation());
+            }
+        }
     }
 
 }
