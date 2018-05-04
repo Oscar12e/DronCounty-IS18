@@ -30,7 +30,7 @@ public class StationsLogic {
 
         Hashtable <Integer, ArrayList <Trip> > currentSchedule = currentStation.getSchedule();
 
-        Trip sendingTrip = currentStation.getTripsToShechedule().get(pDestinyStation).remove(0);
+        Trip sendingTrip = currentStation.getTripsToSchedule().get(pDestinyStation).remove(0);
 
         if (currentSchedule.containsKey(pSecondDeparture)){
             ArrayList<Trip> temporaryTripList = currentSchedule.get(pSecondDeparture);
@@ -51,7 +51,7 @@ public class StationsLogic {
         Hashtable <Integer, ArrayList <Trip> > currentSchedule = currentStation.getSchedule();
 
         Trip cancelledTrip = currentSchedule.get(pSecondDeparture).remove(0);
-        currentStation.getTripsToShechedule().get(pDestinyStation).add(cancelledTrip);
+        currentStation.getTripsToSchedule().get(pDestinyStation).add(cancelledTrip);
 
         //Corrects the update here, method is need
     }
