@@ -21,6 +21,7 @@ public class Main extends Application {
         //s.generateArcs(2);
         s.generateMap(150,150);
 
+        System.out.println(3%9);
 
         System.out.println("Pruebas de Óscar");
         StationsLogic sl = new StationsLogic();
