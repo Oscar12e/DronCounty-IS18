@@ -84,9 +84,6 @@ public class Station implements Comparable<Station> {
         this.schedule = schedule;
     }
 
-
-
-
     public Hashtable<Character, Integer> getTimeDistance() {
         return timeDistance;
     }
