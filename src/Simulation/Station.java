@@ -14,7 +14,7 @@ public class Station implements Comparable<Station> {
     private Hashtable<Character, String > paths;
     private Hashtable <Integer, ArrayList <Trip> > schedule;
     private Hashtable <Character, Integer> timeDistance;
-    private Hashtable <Character, ArrayList<Trip> > tripsToShechedule;
+    private Hashtable <Character, ArrayList<Trip> > tripsToSchedule;
 
     public Station(int quantityDronesTotal, int idStation, Hashtable<Integer,Integer> pDronesLeft) {
         this.totalDronesQuantity = quantityDronesTotal;
@@ -96,12 +96,12 @@ public class Station implements Comparable<Station> {
     }
 
 
-    public Hashtable<Character, ArrayList<Trip>> getTripsToShechedule() {
-        return tripsToShechedule;
+    public Hashtable<Character, ArrayList<Trip>> getTripsToSchedule() {
+        return tripsToSchedule;
     }
 
-    public void setTripsToShechedule(Hashtable<Character, ArrayList<Trip>> tripsToShechedule) {
-        this.tripsToShechedule = tripsToShechedule;
+    public void setTripsToSchedule(Hashtable<Character, ArrayList<Trip>> tripsToSchedule) {
+        this.tripsToSchedule = tripsToSchedule;
     }
 
     @Override
