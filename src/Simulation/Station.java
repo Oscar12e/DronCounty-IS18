@@ -9,22 +9,25 @@ public class Station implements Comparable<Station> {
     private int totalDronesQuantity;
     private int currentDronesQuantity;
     private char idStation;
-    private List<Character> destinyStations;
+    private List<Character> destinyStations;//necesario?
+    private ArrayList<Trip> trips;
 
     private Hashtable<Integer, ArrayList<Integer>> paths;
     private Hashtable <Integer, ArrayList <Trip> > schedule;
     private Hashtable <Character, ArrayList <Integer> > departureTime;
 
 
-    public Station(int quantityDronesTotal, int idStation, Hashtable<Integer,Integer> pDronesLeft) {
+    public Station(int quantityDronesTotal, char idStation) {//Hashtable<Integer,Integer> pDronesLeft
         this.totalDronesQuantity = quantityDronesTotal;
         this.currentDronesQuantity = quantityDronesTotal;
+        this.idStation = idStation;
+        this.trips = new ArrayList<>();
     }
 
-    public Station(int ask, char pIdStation) {
+    /*public Station(int ask, char pIdStation) {
         this.idStation = pIdStation;
         this.paths = new Hashtable<>();
-    }
+    }*/
 
     public int getTotalDronesQuantity() {
         return totalDronesQuantity;
@@ -46,16 +49,20 @@ public class Station implements Comparable<Station> {
         return idStation;
     }
 
-    public void setIdStation(char idStation) {
-        this.idStation = idStation;
-    }
-
     public List<Character> getDestinyStations() {
         return destinyStations;
     }
 
     public void setDestinyStations(List<Character> destinyStations) {
         this.destinyStations = destinyStations;
+    }
+
+    public ArrayList<Trip> getTrips() {
+        return trips;
+    }
+
+    public void setTrips(ArrayList<Trip> trips) {
+        this.trips = trips;
     }
 
     public Hashtable<Integer, ArrayList<Integer>> getPaths() {
@@ -92,4 +99,5 @@ public class Station implements Comparable<Station> {
         else
             return -1;
     }
+
 }

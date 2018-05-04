@@ -14,10 +14,11 @@ public class Main extends Application {
 
     public static void main(String[] args){
         Simulator s = new Simulator();
-        s.generateNodes(5,1000);
+        s.generateNodes(3,10000000);
         s.generateMap(500,500);
-        s.generateArcs(5);
+        s.generateArcs(29);
         s.printInfo();
+        s.generateTripPackages(300);
 
 /*
         System.out.println("Iniciando aplicación");

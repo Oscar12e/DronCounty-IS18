@@ -179,6 +179,52 @@ public class Simulator<T> {
         return closerNodes;
     }
 
+    public void generateTripPackages(int highwayWidth){
+        Trip.setMaxDronesPerTrip(highwayWidth);
+        int highwayCapacity = Trip.getMaxDronesPerTrip();
+        Random random = new Random(System.currentTimeMillis());
+        int randomStationIndex;
+        int tripsQuantity;
+        Station station;
+        Station destinyStation;
+        int totalDrones = 0;
+        int leftDrones = 0;
+        for (int i=0; i<graph.getVertexList().size(); i++){
+            station = (Station) graph.getVertexList().get(i).getValue();
+            if(station.getTotalDronesQuantity() % highwayCapacity > 0)
+                tripsQuantity = station.getTotalDronesQuantity()/highwayCapacity+1;
+            else
+                tripsQuantity = station.getTotalDronesQuantity()/highwayCapacity;
+            totalDrones = station.getTotalDronesQuantity();
+            leftDrones = totalDrones%highwayCapacity;
+            for (int j=0; j<tripsQuantity; j++){
+                randomStationIndex = random.nextInt(graph.getVertexList().size());
+                destinyStation = (Station) graph.getVertexList().get(randomStationIndex).getValue();
+                if(j==tripsQuantity-1)
+                    station.getTrips().add(new Trip(destinyStation, leftDrones));
+                else
+                    station.getTrips().add(new Trip(destinyStation, highwayCapacity));
+                //System.out.println(randomStationIndex + "index "+ j + " capacity" +highwayCapacity);
+            }
+            /*System.out.println(station.getTrips().size());
+            int contadorA=0;
+            int contadorB=0;
+            int contadorC=0;
+            for (int j=0; j<station.getTrips().size();j++){
+                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'A')
+                    contadorA++;
+                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'B')
+                    contadorB++;
+                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'C')
+                    contadorC++;
+            }
+            System.out.println("Contador A "+ contadorA);
+            System.out.println("Contador B "+ contadorB);
+            System.out.println("Contador C "+ contadorC);*/
+        }
+
+    }
+
     public void printInfo(){
         Station station;
         for (int i=0; i<graph.getVertexList().size(); i++){
