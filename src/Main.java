@@ -5,9 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
@@ -115,8 +113,13 @@ public class Main extends Application {
 
 
         sl.setStationsToControl(stationsHash);
-        //sl.setTravelingTimePerStation();
-
+        sl.setTravelingBetweenStations();
+        sl.setRoutesUsedByTravels();
+        System.out.println("Ahora viene lo bueno");
+        sl.setDepartureTimeDifferenceNeed2();
+        System.out.println("Ahora viene lo bueno2");
+        sl.updateDepartureTime('a', 'b', 0);
+        System.out.println("Ahora viene lo bueno3");
         return;
 
         //launch(args);
