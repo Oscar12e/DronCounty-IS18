@@ -1,8 +1,6 @@
 package Simulation;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class GraphLogic<T> {
     private Graph<T> graph;
@@ -49,30 +47,51 @@ public class GraphLogic<T> {
         return false;
     }
 
-    public LinkedList<Node> dijkstra(Node origin){
-        PriorityQueue<Node> queue = new PriorityQueue<Node>();
-        origin.setMinDistance(0);
-        queue.add(origin);
+    public Hashtable<Node<T>, Integer> dijkstraShorterRoute(Node<T> source){
+        Hashtable<Node<T>, Integer> shortestPaths = new Hashtable<>();
+        ArrayList<Node<T>> nodesToProccess = new ArrayList<>();
+        source.setMinDistance(0);
+        shortestPaths.put(source,0);
 
-        while(!queue.isEmpty()){
-            Node nodeQueued = queue.poll();
+        nodesToProccess.add(source);
+        while (nodesToProccess.size() > 0){
+            Node<T> node = nodesToProccess.get(0);
+            nodesToProccess.remove(node);
+            node.setVisited(true);
+            ArrayList<Arc> neighbors = node.getArcs();
 
-            for(int i = 0; i<nodeQueued.getArcs().size(); i++){
-                Arc neighbour = (Arc) nodeQueued.getArcs().get(i);
-                int newDist = nodeQueued.getMinDistance()+neighbour.getWeight();
+            for (int i=0; i<neighbors.size(); i++){
+                Node<T> actual = neighbors.get(i).getDestiny();
+                int actualDistance = neighbors.get(i).getWeight();
 
-                if(neighbour.getDestiny().getMinDistance()>newDist){
-                    queue.remove(neighbour.getDestiny());
-                    neighbour.getDestiny().setMinDistance(newDist);
+                if(!shortestPaths.containsKey(actual)/*actual.getMinDistance()==Integer.MAX_VALUE*/)
+                    shortestPaths.put(actual, actualDistance+shortestPaths.get(node));
+                    //actual.setMinDistance(actual.getMinDistance()+node.getMinDistance());
+                else if(shortestPaths.get(actual) > shortestPaths.get(node)+neighbors.get(i).getWeight()/*actual.getMinDistance() > node.getMinDistance() + neighbors.get(i).getWeight()*/)
+                    shortestPaths.put(actual, shortestPaths.get(node) + actualDistance);
+                    //actual.setMinDistance(actual.getMinDistance() + node.getMinDistance() + neighbors.get(i).getWeight());
+                if (actual.isVisited() == false)
+                    nodesToProccess.add(actual);
+            }
+            nodesToProccess.remove(node);
+        }
+        System.out.println(shortestPaths.toString());
+        source.setShortestPaths(shortestPaths);
+        return shortestPaths;
+    }
 
-                    neighbour.getDestiny().setPath(new LinkedList<Node>(nodeQueued.getPath()));
-                    neighbour.getDestiny().getPath().add(nodeQueued);
-
-                    queue.add(neighbour.getDestiny());
-                }
+    public Node<T> getShorterPath(ArrayList<Node<T>> fringe){
+        Node<T> comparable;
+        if(fringe.size()==1)
+            return fringe.get(0);
+        else {
+            comparable = fringe.get(0);
+            for (int i = 1; i < fringe.size(); i++) {
+                if (comparable.getMinDistance() > fringe.get(i).getMinDistance())
+                    comparable = fringe.get(i);
             }
         }
-        return origin.getPath();
+            return comparable;
     }
 
     public ArrayList searchVoidNodes(char key){
@@ -89,26 +108,4 @@ public class GraphLogic<T> {
         return null;
     }
 
-    public ArrayList searchClosestNodes(Node source, int quantity){
-        ArrayList<Node> closestNodes = new ArrayList<>();
-        for(int i=0; i<quantity; i++){
-            //???????????
-        }
-        return closestNodes;
-    }
-
-    public void cleanPaths(){
-        for (int i = 0; i<graph.getVertexList().size(); i++){
-            graph.getVertexList().get(i).setPath(null);
-        }
-    }
-
-    public void cleanMinDistance(){
-        for (int i = 0; i<graph.getVertexList().size(); i++){
-            graph.getVertexList().get(i).setMinDistance(Integer.MAX_VALUE);
-        }
-    }
-
-    //calcular distancia
-    //Math.hypot(x1 -x2, y1 -y2)
 }

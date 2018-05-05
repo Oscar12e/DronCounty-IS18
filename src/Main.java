@@ -14,9 +14,9 @@ public class Main extends Application {
 
     public static void main(String[] args){
         Simulator s = new Simulator();
-        s.generateNodes(3,10000000);
+        s.generateNodes(4,10000000);
         s.generateMap(500,500);
-        s.generateArcs(29);
+        s.generateArcs(2);
         s.printInfo();
         s.generateTripPackages(300);
 

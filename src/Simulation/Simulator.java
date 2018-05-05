@@ -224,6 +224,21 @@ public class Simulator<T> {
         }
 
     }
+/*
+    public void calculateClosestRoutes(){
+        Station sourceStation;
+        Station destinyStation;
+        for (int i=0; i<graph.getVertexList().size(); i++){
+            sourceStation = (Station) graph.getVertexList().get(i).getValue();
+            for (int j=0; j<graph.getVertexList().size(); j++){
+                destinyStation = (Station) graph.getVertexList().get(j).getValue();
+                if(i==j)//If it is the same station
+                    continue;
+                graphLogic.dijkstra(graph.getVertexList().get(i));
+            }
+        }
+
+    }*/
 
     public void printInfo(){
         Station station;
@@ -235,6 +250,8 @@ public class Simulator<T> {
                 System.out.println(graph.getVertexList().get(i).getArcs().get(j).getWeight() + " to station: "+ s.getIdStation());
             }
         }
+        //System.out.println(graphLogic.dijkstra(graph.getVertexList().get(0)));
+        graphLogic.dijkstraShorterRoute(graph.getVertexList().get(0));
     }
 
 }

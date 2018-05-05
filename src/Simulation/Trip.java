@@ -33,7 +33,7 @@ public class Trip {
     }
 
     public static void setMaxDronesPerTrip(int pWidth){ //Width siempre sera mayor o igual al ancho de dos drones
-       maxDronesPerTrip = (HEIGHT*pWidth)/(drone.getHIGH()*drone.getWIDTH());//(pWidth/2 * HEIGHT) / (drone.getWIDTH()); 	//Ancho divido entre dos (variable) por altura (constante)
+       maxDronesPerTrip = ((HEIGHT*pWidth)/(drone.getHIGH()*drone.getWIDTH()))/2;//(pWidth/2 * HEIGHT) / (drone.getWIDTH()); 	//Ancho divido entre dos (variable) por altura (constante)
     }
 
 }
