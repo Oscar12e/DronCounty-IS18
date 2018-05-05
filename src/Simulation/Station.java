@@ -45,6 +45,22 @@ public class Station implements Comparable<Station> {
 
     }
 
+    /**
+     * In worse case scenario, all the trips would be to the mos far station.
+     * Takes the regular distance to get there add the time to deploy (30s), then multiplies by the quantity of trips.
+     * @return The time taht would take sending all the trips to this station.
+     */
+    public int getWorseCaseTime(){
+        int higherTripDuration = 0;
+
+        for (char destinyId: this.timeDistance.keySet()){
+            if (this.timeDistance.get(destinyId) > higherTripDuration)
+                higherTripDuration = Math.round( (totalDronesQuantity/Trip.getMaxDronesPerTrip()) * (this.timeDistance.get(destinyId) + 30) + 0.4f );
+        }
+
+        return higherTripDuration;
+    }
+
     public int getTotalDronesQuantity() {
         return totalDronesQuantity;
     }
@@ -102,8 +118,6 @@ public class Station implements Comparable<Station> {
     }
 
 
-
-
     public Hashtable<Character, Float> getTimeDistance() {
         return timeDistance;
     }
@@ -119,6 +133,14 @@ public class Station implements Comparable<Station> {
 
     public void setTripsToSchedule(Hashtable<Character, ArrayList<Trip>> tripsToSchedule) {
         this.tripsToSchedule = tripsToSchedule;
+    }
+
+    public void getTripsToScheduleAsList(){
+        List<String> t = new ArrayList<String>();
+
+        for (Character destinyID: tripsToSchedule.keySet()){
+            tripsToSchedule.get(destinyID).size();
+        }
     }
 
     @Override

@@ -9,13 +9,52 @@ import java.util.List;
  * @atribute
  */
 public class StationsLogic {
-    private Hashtable<Character, Station> stationsToControl;
+    private int worstTimeAccepted;
+    private List<String> travelingBetweenStations = new ArrayList<String>(); //Like AB AC AD AE BE BC
 
-    private Hashtable <String, Hashtable < Character, Hashtable < Character, Integer > > > departureTimeDifferenceNeed;
-    private Hashtable <String, Hashtable< String, ArrayList<Integer> >> travelingTimePerStation; //Not so useful, now that i think about it
+    private Hashtable <Character, Station> stationsToControl;
+    private Hashtable <String, Hashtable < String, Integer  > > departureTimeDifferenceNeed = new Hashtable <String, Hashtable < String, Integer  > >();
+    private Hashtable <Character, Hashtable< Character, List <Integer> >> availableDepartureTimes = new Hashtable <Character, Hashtable< Character, List <Integer> >>(); //Only need it to make calculationsavaibleDepartureTimes
+    private Hashtable <String, List<String> > routesUsedByTravels = new  Hashtable <String, List<String> >();
 
-    private Hashtable <Character, Hashtable< Character, List <Integer> >> avaibleDepartureTimes; //Only need it to make calculos
 
+    /**
+     * @param pDepartureStation: The station form which the trip its going to sail (i know sailing is for boats)
+     * @param pDestinyStation: The station from which the trip is going to
+     * @param pSecondDeparture: The second the trip is leaving
+     */
+    public boolean sendTrips(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
+        Station currentStation  = stationsToControl.get(pDepartureStation);
+
+        Hashtable <Integer, ArrayList <Trip> > currentSchedule = currentStation.getSchedule();
+
+        currentStation.getTripsToSchedule().get(pDestinyStation);
+        Trip sendingTrip = currentStation.getTripsToSchedule().get(pDestinyStation).remove(0);
+
+        if (currentSchedule.containsKey(pSecondDeparture)){
+            ArrayList<Trip> temporaryTripList = currentSchedule.get(pSecondDeparture);
+            temporaryTripList.add(0, sendingTrip);
+            currentSchedule.replace(pSecondDeparture, temporaryTripList);
+        } else {
+            ArrayList<Trip> temporaryTripList = new ArrayList<Trip>(){{add(sendingTrip);}};
+            currentSchedule.put(pSecondDeparture, temporaryTripList);
+        }
+        //Updates the desparture times for all stations
+        return updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture);
+
+    }
+
+
+    public void cancelTrip(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
+        Station currentStation  = stationsToControl.get(pDepartureStation);
+
+        Hashtable <Integer, ArrayList <Trip> > currentSchedule = currentStation.getSchedule();
+
+        Trip cancelledTrip = currentSchedule.get(pSecondDeparture).remove(0);
+        currentStation.getTripsToSchedule().get(pDestinyStation).add(cancelledTrip);
+
+        //Corrects the update here, method is need
+    }
 
     /**
      * @param pDepartureStation Char witch the id ot the 'Station of departure'
@@ -23,58 +62,163 @@ public class StationsLogic {
      * @param pSecondDeparture Integer with the second select for the departure of the trip
      * This method makes an update based on the router indicated by pRouteId in time indicated by pSecondDeparture.
     */
-    public void updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
+    public boolean updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
         //Creates a hash with the conflicting trips of other stations, based on where is the trip starting and where is going
-        Hashtable < Character, Hashtable < Character, Integer > > stationsToUpdate =  this.departureTimeDifferenceNeed.get(new StringBuilder().append(pDepartureStation).append(pDestinyStation).toString());
+        Hashtable < String, Integer  > stationsToUpdate =  this.departureTimeDifferenceNeed.get(new StringBuilder().append(pDepartureStation).append(pDestinyStation).toString());
 
-        //Takes the idCode for every Station with trips that cause conflicts
-        for (char conflictingStationID : stationsToUpdate.keySet()){
+        //Takes the idCode for every Station with trips that cause conflicts, so it can use it to take data from the conflicting Station
+        for (String conflictingStationRoute : stationsToUpdate.keySet()){
+            char conflictingStationID = conflictingStationRoute.charAt(0);
+            char conflictingDestiny = conflictingStationRoute.charAt(1);
             //Gets a hash with 'K': Destiny V: 'ArrayList of departure times'
+            Hashtable <Character, List <Integer> > departureTimesToUpdate = availableDepartureTimes.get(conflictingStationID); //stationsToControl.get(conflictingStationID).getAvaibleDepartureTimes();
 
-            Hashtable <Character, List <Integer> > departureTimesToUpdate = avaibleDepartureTimes.get(conflictingStationID); //stationsToControl.get(conflictingStationID).getAvaibleDepartureTimes();
             //Gets a hash with 'K': Destiny V: 'update to be make'
-            Hashtable <Character, Integer> timeUpdatePerDestiny = stationsToUpdate.get(conflictingStationID);
+            //V: I's an integer, it can be positive or negative
+            //Hashtable <Character, Integer> timeUpdatePerDestiny = stationsToUpdate.get(conflictingStationRoute);
 
-            //Each destiny of the conflicting station its checked
-            for (char conflictingDestiny: timeUpdatePerDestiny.keySet()){
-                int conflictTimeBegin = timeUpdatePerDestiny.get(conflictingDestiny) + pSecondDeparture;
+            //Each destiny of the conflicting station is checked
+            //for (char conflictingDestiny: timeUpdatePerDestiny.keySet()){
+                int conflictTime = stationsToUpdate.get(conflictingStationRoute) + pSecondDeparture;
                 //All departure between this last values will definitely cause a collision
 
                 List<Integer> departureTimes = departureTimesToUpdate.get(conflictingDestiny);
-                int current = 0;
 
+                //We use two cycles cos it gives a better worst case scenario
+                int current = 0;
                 //Checks all times till finding a time that cause problems
                 while (current < departureTimes.size()) {
-                    if (conflictTimeBegin <= departureTimes.get(current) + 29)
+                    if (departureTimes.get(current) -29 <= conflictTime && conflictTime  <= departureTimes.get(current) + 29)
                         break;
                     current++;
                 }
 
                 //Gets the value that has to be add to make sure no collision will happen
-                int update = conflictTimeBegin - departureTimes.get(current) + 1;
+                int update = conflictTime - departureTimes.get(current) + 1;
                 while (current < departureTimes.size()) {
                     departureTimes.set(current, departureTimes.get(current) + update);
                     current++;
                 }
 
+
+
                 //Saves the new list
                 departureTimesToUpdate.replace(conflictingDestiny, departureTimes);
+
+            availableDepartureTimes.replace(conflictingStationID, departureTimesToUpdate);
+        }
+
+        return true;
+
+    }
+
+    public void setTravelingBetweenStations(){
+        ArrayList<Character> stationsIDs = new ArrayList<Character>();
+        for (char currentStationId: stationsToControl.keySet())
+            stationsIDs.add(currentStationId);
+
+        for (int currentDepartureStation = 0; currentDepartureStation < stationsIDs.size(); currentDepartureStation++) {
+            for (int currentDestinyStation = 0; currentDestinyStation < stationsIDs.size(); currentDestinyStation++){
+                if (currentDepartureStation == currentDestinyStation)
+                    continue;
+                this.travelingBetweenStations.add(new StringBuilder().append(stationsIDs.get(currentDepartureStation)).append(stationsIDs.get(currentDestinyStation)).toString());
             }
         }
+
+            /*for (int i = 0; i< 5; i++){
+                this.travelingBetweenStations.add(new StringBuilder().append(currentStationId).append("abc$#".charAt(i)).toString());
+            }*/
+
+
     }
 
-    /*
-    public void test (){
-        for (char currentStationID: stationsToControl.keySet()){
-            Station currentStation = stationsToControl.get(currentStationID);
 
-            Hashtable<Character, String> currentPaths = currentStation.getPaths();
+    public void setRoutesUsedByTravels(){
+        for (String tripCode: this.travelingBetweenStations){
+            Station currentStation = stationsToControl.get(tripCode.charAt(0));
+            String route = currentStation.getPaths().get(tripCode.charAt(1));
 
-            currentStation.getTimeDistance();
+            if (route == null)
+                continue;
 
+            char code[] = {tripCode.charAt(0),' '};
+            //Code From -> To
+
+            for (int index = 0; index < route.length(); index++){
+                code[1] = route.charAt(index);
+
+
+                if (routesUsedByTravels.containsKey(String.valueOf(code))) {
+                    List<String> savedList = routesUsedByTravels.get(String.valueOf(code));
+                    savedList.add(tripCode);
+                    routesUsedByTravels.replace(String.valueOf(code), savedList);
+                } else {
+                    routesUsedByTravels.put(String.valueOf(code), new ArrayList<String>() {{add(tripCode);}});
+                }
+                code[0] = route.charAt(index);
+            }
         }
+
+        /*
+        System.out.println(":)");
+        for (String k: routesUsedByTravels.keySet()){
+            System.out.println(k);
+            for (String i: routesUsedByTravels.get(k))
+                System.out.println("\t" + i);
+            System.out.println("\n");
+        }*/
+
     }
-    */
+
+    public void setDepartureTimeDifferenceNeed(){
+        //Salida+Destino -> Salida -> Destino -> Tiempo
+        //private Hashtable <String, Hashtable < Character, Hashtable < Character, Integer > > > departureTimeDifferenceNeed;
+        this.departureTimeDifferenceNeed = new  Hashtable <String, Hashtable < String, Integer > >();
+
+        //Arc between stations
+        for (String currentArc: routesUsedByTravels.keySet()){
+            System.out.println(currentArc);
+
+            List<String> pathsThatUseCurrentArc = routesUsedByTravels.get(currentArc);
+
+            //For each path that its held in here
+            for (int currentPathRoute = 0; currentPathRoute < pathsThatUseCurrentArc.size(); currentPathRoute++){
+                String currentDeparturePath = pathsThatUseCurrentArc.get(currentPathRoute);
+
+                for (int currentCompare = 0; currentCompare < pathsThatUseCurrentArc.size(); currentCompare++){
+                    if (currentPathRoute == currentCompare)
+                        continue;
+                    else if (!this.departureTimeDifferenceNeed.containsKey(currentDeparturePath))
+                        this.departureTimeDifferenceNeed.put(currentDeparturePath, new Hashtable < String, Integer >());
+
+                    updateDepartureTimeDifferenceNeed(currentDeparturePath, pathsThatUseCurrentArc.get(currentCompare));
+                }
+            }
+
+            }
+
+            /*
+            for (String i: departureTimeDifferenceNeed.keySet()){
+                System.out.println(i);
+                for (String j: departureTimeDifferenceNeed.get(i).keySet()){
+                    System.out.println("\t" + j + ": " +  departureTimeDifferenceNeed.get(i).get(j));
+                }
+            }
+
+            System.out.println("\n");
+            */
+        }
+
+
+
+    public void updateDepartureTimeDifferenceNeed(String fromStation, String toStation){
+        Hashtable<String, Integer> conflitctosA =  this.departureTimeDifferenceNeed.get(fromStation);
+        float exactDifference = this.stationsToControl.get(fromStation.charAt(0)).getTimeDistance().get(toStation.charAt(1)) - this.stationsToControl.get(toStation.charAt(0)).getTimeDistance().get(toStation.charAt(1));
+        int worseCase = Math.round(exactDifference + 0.4f);
+        conflitctosA.put(toStation, worseCase);
+        this.departureTimeDifferenceNeed.replace(fromStation, conflitctosA);
+    }
+
 
     public Hashtable<Character, Station> getStationsToControl() {
         return stationsToControl;
@@ -82,21 +226,45 @@ public class StationsLogic {
 
     public void setStationsToControl(Hashtable<Character, Station> stationsToControl) {
         this.stationsToControl = stationsToControl;
+
+        /* delete it, it has to be in other function that works with stationToControl and timeMax*/
+        for (char id: stationsToControl.keySet()){
+
+            availableDepartureTimes.put(id, new Hashtable<Character, List<Integer>>() {{
+                for (char stationId : stationsToControl.keySet()) {
+                    ArrayList<Integer> departureTimeForStation = new ArrayList<Integer>() {{
+                        for (int departureTime = 0; departureTime < worstTimeAccepted; departureTime+=30)
+                            add(departureTime);
+                    }};
+                    put(stationId, departureTimeForStation);
+                }                                                                     }} );
+        }
+
     }
 
-    public Hashtable<String, Hashtable<Character, Hashtable<Character, Integer>>> getDepartureTimeDifferenceNeed() {
-        return departureTimeDifferenceNeed;
+    public List<String> getTripsPerStation(){
+        return new ArrayList<String>();
     }
 
-    public void setDepartureTimeDifferenceNeed(Hashtable<String, Hashtable<Character, Hashtable<Character, Integer>>> departureTimeDifferenceNeed) {
-        this.departureTimeDifferenceNeed = departureTimeDifferenceNeed;
+
+    public Hashtable<Character, Hashtable<Character, List<Integer>>> getAvailableDepartureTimes() {
+        return availableDepartureTimes;
     }
 
-    public Hashtable<String, Hashtable<String, ArrayList<Integer>>> getTravelingTimePerStation() {
-        return travelingTimePerStation;
+    public void setAvaibleDepartureTimes(Hashtable<Character, Hashtable<Character, List<Integer>>> avaibleDepartureTimes) {
+        this.availableDepartureTimes = avaibleDepartureTimes;
     }
 
-    public void setTravelingTimePerStation(Hashtable<String, Hashtable<String, ArrayList<Integer>>> travelingTimePerStation) {
-        this.travelingTimePerStation = travelingTimePerStation;
+    public int getWorstTimeAccepted() {
+        return worstTimeAccepted;
+    }
+
+    public void setWorstTimeAccepted() {
+        this.worstTimeAccepted = 0;
+
+        for (char stationID: this.stationsToControl.keySet()){
+            this.worstTimeAccepted += this.stationsToControl.get(stationID).getWorseCaseTime();
+        }
+
     }
 }

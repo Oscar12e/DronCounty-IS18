@@ -205,9 +205,7 @@ public class Simulator<T> {
                     if(!station.getTripsToSchedule().containsKey(destinyStation.getIdStation())) {
                         ArrayList <Trip> currentTrips = new ArrayList<>();
                         currentTrips.add(new Trip(destinyStation, leftDrones));
-                        //ArrayList<Trip> currentTrips = station.getTripsToSchedule().get(destinyStation.getIdStation());
-                        //System.out.println(currentTrips);
-                        //currentTrips.add(new Trip(destinyStation, leftDrones));
+
                         station.getTripsToSchedule().put(destinyStation.getIdStation(),currentTrips);
                     }
                     else{
@@ -228,23 +226,6 @@ public class Simulator<T> {
                     }
                 }
             }
-            System.out.println(station.getTripsToSchedule().size());
-
-            /*System.out.println(station.getTrips().size());
-            int contadorA=0;
-            int contadorB=0;
-            int contadorC=0;
-            for (int j=0; j<station.getTrips().size();j++){
-                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'A')
-                    contadorA++;
-                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'B')
-                    contadorB++;
-                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'C')
-                    contadorC++;
-            }
-            System.out.println("Contador A "+ contadorA);
-            System.out.println("Contador B "+ contadorB);
-            System.out.println("Contador C "+ contadorC);*/
         }
 
     }

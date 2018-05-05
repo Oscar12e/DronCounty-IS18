@@ -2,20 +2,14 @@ package Simulation;
 
 //patron strategy
 public abstract class Scheduler {
+    StationsLogic logic;
 
-
-
-    public Scheduler(int tripsAmount, int stationsAmount, float simulationTime, int arcsPerStation) {
-
-        //calculo de simulateHourEquivalentToMiliseconds
-    }
-
-    public Scheduler() {
+    public Scheduler(StationsLogic pLogic) {
+        this.logic = pLogic;
     }
 
 
 
-    public boolean runSimulation(){ //TO-DO: aclarar los parametros que van aqui
-        return false;
-    }
+    public abstract boolean runSimulation(); //TO-DO: aclarar los parametros que van aqu
+
 }
