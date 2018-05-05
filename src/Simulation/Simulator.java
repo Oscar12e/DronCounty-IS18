@@ -1,6 +1,8 @@
 package Simulation;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Simulator<T> {
@@ -50,6 +52,12 @@ public class Simulator<T> {
             station.setTotalDronesQuantity(station.getTotalDronesQuantity()-(totalDrones-dronesQuantity));
             station.setCurrentDronesQuantity(station.getTotalDronesQuantity());
         }
+
+        //Clone the content of graph.VertexList to each Node.availableNodes
+        for (int i=0; i<stationsQuantity; i++){
+            graph.getVertexList().get(i).setAvailableNodes(new ArrayList<>(graph.getVertexList()));
+            graph.getVertexList().get(i).getAvailableNodes().remove(i);
+        }
 /*
         for(int i=0; i<stationsQuantity-1; i++){
             percentage = random.nextInt(100);
@@ -67,6 +75,8 @@ public class Simulator<T> {
     }
 
     public boolean generateArcs(int arcsPerStation){
+        if(arcsPerStation>=graph.getVertexList().size())
+            arcsPerStation=graph.getVertexList().size()-1;
         if (graph.getVertexList().size()<arcsPerStation)
             return false;
         Station station;
@@ -75,17 +85,31 @@ public class Simulator<T> {
             Node sourceStation = graphLogic.searchVertex(station.getIdStation());
             Random random = new Random(System.currentTimeMillis());
             int randomId;
+            int arcsLeft = 0;
+            ArrayList<Node> closerNodes = null;
             for(int j=0; j<arcsPerStation; j++) {
+                //System.out.println(j);
                 ArrayList<Node> voidNodes = graphLogic.searchVoidNodes(station.getIdStation());
-                if (voidNodes != null) {
+                if (voidNodes.size()>0) {
+                    //System.out.println(voidNodes.size());
                     randomId = random.nextInt(voidNodes.size());
-                    int randomWeight = random.nextInt(1000);
                     Node chosenStation = voidNodes.get(randomId);
-                    graphLogic.insertArc(sourceStation, chosenStation, randomWeight);
+                    int weight = calculateTwoNodeDistance(chosenStation, sourceStation);
+                    graphLogic.insertArc(sourceStation, chosenStation, weight);
                     //System.out.println(chosenStation.getArcs());
                 }
                 else {
                     //Entre estaciones mas cercanas
+                    arcsLeft = arcsPerStation-j;
+                    closerNodes = getCloserNodes(sourceStation);
+                    break;
+                }
+            }
+            if(arcsLeft != 0 && closerNodes.size()!=0) {
+                for (int j = 0; j < arcsLeft; j++) {
+                    //System.out.println(j);
+                    int weight = calculateTwoNodeDistance(sourceStation, closerNodes.get(0));
+                    graphLogic.insertArc(sourceStation, closerNodes.remove(0), weight);
                 }
             }
         }
@@ -131,16 +155,160 @@ public class Simulator<T> {
         }
     }
 
-    public int calculateTwoNodeDistance(char key1, char key2){
-        Node node1 = graphLogic.searchVertex(key1);
-        Node node2 = graphLogic.searchVertex(key2);
+    public int calculateTwoNodeDistance(Node<T> node1, Node<T> node2){
+        //Node node1 = graphLogic.searchVertex(key1);
+        //Node node2 = graphLogic.searchVertex(key2);
 
         int result = (int) Math.hypot(node1.getOrderedPair().getX()-node2.getOrderedPair().getX(), node1.getOrderedPair().getY()-node2.getOrderedPair().getY());
         return result;
     }
 
-    public ArrayList<Node> getCloserNodes(char key){
-        return null;
+    public ArrayList<Node<T>> getCloserNodes(Node<T> source){
+        ArrayList<Node<T>> closerNodes = new ArrayList<>();
+        if(source.getAvailableNodes().size() == 0){
+            return closerNodes;
+        }
+        for (int i=0; i<source.getAvailableNodes().size(); i++){
+            if(closerNodes==null)
+                closerNodes.add(source.getAvailableNodes().get(i));
+            else if(calculateTwoNodeDistance(source, source.getAvailableNodes().get(i)) < calculateTwoNodeDistance(source, source.getAvailableNodes().get(i))){
+                closerNodes.add(i-1, source.getAvailableNodes().get(i));
+            }
+            else
+                closerNodes.add(source.getAvailableNodes().get(i));
+        }
+        return closerNodes;
+    }
+
+    public void generateTripPackages(int highwayWidth){
+        Trip.setMaxDronesPerTrip(highwayWidth);
+        int highwayCapacity = Trip.getMaxDronesPerTrip();
+        Random random = new Random(System.currentTimeMillis());
+        int randomStationIndex;
+        int tripsQuantity;
+        Station station;
+        Station destinyStation;
+        int totalDrones = 0;
+        int leftDrones = 0;
+        for (int i=0; i<graph.getVertexList().size(); i++){
+            station = (Station) graph.getVertexList().get(i).getValue();
+            if(station.getTotalDronesQuantity() % highwayCapacity > 0)
+                tripsQuantity = station.getTotalDronesQuantity()/highwayCapacity+1;
+            else
+                tripsQuantity = station.getTotalDronesQuantity()/highwayCapacity;
+            totalDrones = station.getTotalDronesQuantity();
+            leftDrones = totalDrones%highwayCapacity;
+            for (int j=0; j<tripsQuantity; j++){
+                randomStationIndex = random.nextInt(graph.getVertexList().size());
+                destinyStation = (Station) graph.getVertexList().get(randomStationIndex).getValue();
+                if(j==tripsQuantity-1) {
+                        ArrayList<Trip> currentTrips = station.getTripsToSchedule().get(destinyStation.getIdStation());
+                        currentTrips.add(new Trip(destinyStation, leftDrones));
+                }
+                else {
+                    if(station.getTripsToSchedule().containsKey(destinyStation.getIdStation())){
+                        ArrayList<Trip> currentTrips = station.getTripsToSchedule().get(destinyStation.getIdStation());
+                        currentTrips.add(new Trip(destinyStation, highwayCapacity));
+                    }
+                    else{
+                        ArrayList <Trip> currentTrips = new ArrayList<>();
+                        currentTrips.add(new Trip(destinyStation, highwayCapacity));
+                        station.getTripsToSchedule().put(destinyStation.getIdStation(),currentTrips);
+                    }
+                }
+            }
+            /*System.out.println(station.getTrips().size());
+            int contadorA=0;
+            int contadorB=0;
+            int contadorC=0;
+            for (int j=0; j<station.getTrips().size();j++){
+                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'A')
+                    contadorA++;
+                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'B')
+                    contadorB++;
+                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'C')
+                    contadorC++;
+            }
+            System.out.println("Contador A "+ contadorA);
+            System.out.println("Contador B "+ contadorB);
+            System.out.println("Contador C "+ contadorC);*/
+        }
+
+    }
+
+    public void setTripsToScheduleToStation(ArrayList<Trip> trips){
+
+    }
+
+    public void initializeStationsAtributes(){
+        for (int i=0; i<graph.getVertexList().size(); i++){
+            ArrayList<ArrayList<Node<T>>> routes = graphLogic.dijkstraShorterRoute(graph.getVertexList().get(i));
+            setPathsToStation(shortestRoutesToString(routes));
+            calculateTimeDistance(graph.getVertexList().get(i), routes);
+            setDestinyStationsToStation(graph.getVertexList().get(i));
+        }
+
+    }
+
+    public void setDestinyStationsToStation(Node<T> origin){
+        Station station = (Station) origin.getValue();
+        for(int i=0; i<origin.getArcs().size(); i++){
+            Station station1 = (Station) origin.getArcs().get(i).getDestiny().getValue();
+            station.getDestinyStations().add(station1.getIdStation());
+        }
+    }
+
+    public ArrayList<String> shortestRoutesToString(ArrayList<ArrayList<Node<T>>> paths){
+        ArrayList<String> routes = new ArrayList<>();
+        Station station;
+        for(int i=0; i<paths.size(); i++){
+            ArrayList<Node<T>> path = paths.get(i);
+            String route = "";
+            for (int j=0; j<path.size(); j++){
+                station = (Station) path.get(j).getValue();
+                route+=station.getIdStation();
+            }
+            routes.add(route);
+        }
+        System.out.println(routes);
+        return routes;
+    }
+
+    public void setPathsToStation(ArrayList<String> paths){
+        Node<T> origin = graphLogic.searchVertex(paths.get(0).charAt(0));
+        Station station = (Station) origin.getValue();
+        for (int i=0; i<paths.size(); i++){
+            station.getPaths().put(paths.get(i).charAt(paths.get(i).length()-1), paths.get(i));
+        }
+    }
+
+
+    public Hashtable<Character, Float> calculateTimeDistance(Node<T> origin, ArrayList<ArrayList<Node<T>>> paths){
+        Hashtable<Character,Float> timeDistance = new Hashtable<>();
+        Station station;
+        for(int i=0; i<graph.getVertexList().size(); i++){
+            if(origin.getShortestPaths().containsKey(graph.getVertexList().get(i))) {
+                int distance = origin.getShortestPaths().get(graph.getVertexList().get(i));
+                Float time = (float)distance/120;
+                station = (Station) graph.getVertexList().get(i).getValue();
+                timeDistance.put(station.getIdStation(), time);
+            }
+        }
+        return timeDistance;
+    }
+
+    public void printInfo(){
+        Station station;
+        for (int i=0; i<graph.getVertexList().size(); i++){
+            station = (Station) graph.getVertexList().get(i).getValue();
+            System.out.println("Station: "+ station.getIdStation()+"    Arcs: ");
+            for (int j=0; j<graph.getVertexList().get(i).getArcs().size(); j++){
+                Station s = (Station) graph.getVertexList().get(i).getArcs().get(j).getDestiny().getValue();
+                System.out.println(graph.getVertexList().get(i).getArcs().get(j).getWeight() + " to station: "+ s.getIdStation());
+            }
+        }
+        //System.out.println(graphLogic.dijkstra(graph.getVertexList().get(0)));
+        //graphLogic.dijkstraShorterRoute(graph.getVertexList().get(0));
     }
 
 }

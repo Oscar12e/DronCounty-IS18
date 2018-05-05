@@ -1,6 +1,6 @@
 package Simulation;
 
-public class Arc {
+public class Arc{
 
     private int weight;
     private Node destiny;
