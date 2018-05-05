@@ -196,14 +196,26 @@ public class Simulator<T> {
                 tripsQuantity = station.getTotalDronesQuantity()/highwayCapacity+1;
             else
                 tripsQuantity = station.getTotalDronesQuantity()/highwayCapacity;
+
             totalDrones = station.getTotalDronesQuantity();
             leftDrones = totalDrones%highwayCapacity;
+
             for (int j=0; j<tripsQuantity; j++){
                 randomStationIndex = random.nextInt(graph.getVertexList().size());
                 destinyStation = (Station) graph.getVertexList().get(randomStationIndex).getValue();
+                
                 if(j==tripsQuantity-1) {
+                    if(!station.getTripsToSchedule().containsKey(destinyStation.getIdStation())) {
+                        ArrayList <Trip> currentTrips = new ArrayList<>();
+                        currentTrips.add(new Trip(destinyStation, leftDrones));
+
+                        station.getTripsToSchedule().put(destinyStation.getIdStation(),currentTrips);
+                    }
+                    else{
                         ArrayList<Trip> currentTrips = station.getTripsToSchedule().get(destinyStation.getIdStation());
                         currentTrips.add(new Trip(destinyStation, leftDrones));
+                        station.getTripsToSchedule().put(destinyStation.getIdStation(),currentTrips);
+                    }
                 }
                 else {
                     if(station.getTripsToSchedule().containsKey(destinyStation.getIdStation())){
@@ -217,21 +229,6 @@ public class Simulator<T> {
                     }
                 }
             }
-            /*System.out.println(station.getTrips().size());
-            int contadorA=0;
-            int contadorB=0;
-            int contadorC=0;
-            for (int j=0; j<station.getTrips().size();j++){
-                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'A')
-                    contadorA++;
-                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'B')
-                    contadorB++;
-                if(station.getTrips().get(j).getDestinyStation().getIdStation() == 'C')
-                    contadorC++;
-            }
-            System.out.println("Contador A "+ contadorA);
-            System.out.println("Contador B "+ contadorB);
-            System.out.println("Contador C "+ contadorC);*/
         }
 
     }

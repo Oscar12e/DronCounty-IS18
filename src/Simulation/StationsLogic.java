@@ -208,8 +208,9 @@ public class StationsLogic {
 
     public void updateDepartureTimeDifferenceNeed(String fromStation, String toStation){
         Hashtable<String, Integer> conflitctosA =  this.departureTimeDifferenceNeed.get(fromStation);
-        int diferencia = this.stationsToControl.get(fromStation.charAt(0)).getTimeDistance().get(toStation.charAt(1)) - this.stationsToControl.get(toStation.charAt(0)).getTimeDistance().get(toStation.charAt(1));
-        conflitctosA.put(toStation, diferencia);
+        float exactDifference = this.stationsToControl.get(fromStation.charAt(0)).getTimeDistance().get(toStation.charAt(1)) - this.stationsToControl.get(toStation.charAt(0)).getTimeDistance().get(toStation.charAt(1));
+        int worseCase = Math.round(exactDifference + 0.4f);
+        conflitctosA.put(toStation, worseCase);
         this.departureTimeDifferenceNeed.replace(fromStation, conflitctosA);
     }
 
@@ -239,9 +240,6 @@ public class StationsLogic {
 
     }
 
-
-
-
     public List<String> getTripsPerStation(){
         return new ArrayList<String>();
     }
@@ -255,4 +253,16 @@ public class StationsLogic {
         this.availableDepartureTimes = avaibleDepartureTimes;
     }
 
+    public int getWorstTimeAccepted() {
+        return worstTimeAccepted;
+    }
+
+    public void setWorstTimeAccepted() {
+        this.worstTimeAccepted = 0;
+
+        for (char stationID: this.stationsToControl.keySet()){
+            this.worstTimeAccepted += this.stationsToControl.get(stationID).getWorseCaseTime();
+        }
+
+    }
 }
