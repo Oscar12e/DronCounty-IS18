@@ -7,24 +7,26 @@ import java.util.List;
 public class Station implements Comparable<Station> {
 
     private int totalDronesQuantity;
-    private int currentDronesQuantity;
+    private int quantityOfDronesReceived;
     private char idStation;
     //private List<Character> destinyStations;//necesario?
     private ArrayList<Trip> trips;
 
     //private Hashtable<Integer, ArrayList<Integer>> paths;
 
-    private List<Character> destinyStations;
-    private Hashtable<Character, String > paths;
+    private ArrayList<Character> destinyStations; //method done
+    private Hashtable<Character, String > paths; //method done
     private Hashtable <Integer, ArrayList <Trip> > schedule;
-    private Hashtable <Character, Integer> timeDistance;
+    private Hashtable <Character, Float> timeDistance; //method done
     private Hashtable <Character, ArrayList<Trip> > tripsToSchedule;
 
-    public Station(int quantityDronesTotal, char idStation) {//Hashtable<Integer,Integer> pDronesLeft
+    public Station(int quantityDronesTotal, char idStation) {
         this.totalDronesQuantity = quantityDronesTotal;
-        this.currentDronesQuantity = quantityDronesTotal;
+        this.quantityOfDronesReceived = 0;
         this.idStation = idStation;
         this.trips = new ArrayList<>();
+        this.paths = new Hashtable<>();
+        this.destinyStations = new ArrayList<>();
     }
 
     /*public Station(int ask, char pIdStation) {
@@ -32,7 +34,7 @@ public class Station implements Comparable<Station> {
         this.paths = new Hashtable<>();
     }*/
 
-    public Station(char pIdStation, Hashtable<Character, String > pPaths, Hashtable <Character, Integer> pTimeDistance) {
+    public Station(char pIdStation, Hashtable<Character, String > pPaths, Hashtable <Character, Float> pTimeDistance) {
         this.idStation = pIdStation;
         this.paths = pPaths;
         this.timeDistance = pTimeDistance;
@@ -51,11 +53,11 @@ public class Station implements Comparable<Station> {
     }
 
     public int getCurrentDronesQuantity() {
-        return currentDronesQuantity;
+        return quantityOfDronesReceived;
     }
 
     public void setCurrentDronesQuantity(int currentDronesQuantity) {
-        this.currentDronesQuantity = currentDronesQuantity;
+        this.quantityOfDronesReceived = currentDronesQuantity;
     }
 
     public char getIdStation() {
@@ -70,7 +72,7 @@ public class Station implements Comparable<Station> {
         return destinyStations;
     }
 
-    public void setDestinyStations(List<Character> destinyStations) {
+    public void setDestinyStations(ArrayList<Character> destinyStations) {
         this.destinyStations = destinyStations;
     }
 
@@ -101,11 +103,11 @@ public class Station implements Comparable<Station> {
 
 
 
-    public Hashtable<Character, Integer> getTimeDistance() {
+    public Hashtable<Character, Float> getTimeDistance() {
         return timeDistance;
     }
 
-    public void setTimeDistance(Hashtable<Character, Integer> timeDistance) {
+    public void setTimeDistance(Hashtable<Character, Float> timeDistance) {
         this.timeDistance = timeDistance;
     }
 

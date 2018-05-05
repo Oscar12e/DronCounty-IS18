@@ -47,16 +47,19 @@ public class GraphLogic<T> {
         return false;
     }
 
-    public Hashtable<Node<T>, Integer> dijkstraShorterRoute(Node<T> source){
+    public ArrayList<ArrayList<Node<T>>> dijkstraShorterRoute(Node<T> source){
+        source.setShortestPaths(null);
+        cleanVisitedNodes();
         Hashtable<Node<T>, Integer> shortestPaths = new Hashtable<>();
-        ArrayList<Node<T>> nodesToProccess = new ArrayList<>();
-        source.setMinDistance(0);
+        ArrayList<Node<T>> nodesToProcess = new ArrayList<>();
+        Station station;
         shortestPaths.put(source,0);
+        nodesToProcess.add(source);
 
-        nodesToProccess.add(source);
-        while (nodesToProccess.size() > 0){
-            Node<T> node = nodesToProccess.get(0);
-            nodesToProccess.remove(node);
+        //ArrayList<ArrayList<Node<T>>> paths = new ArrayList<>(new ArrayList<>());
+        while (nodesToProcess.size() > 0){
+            Node<T> node = nodesToProcess.get(0);
+            nodesToProcess.remove(node);
             node.setVisited(true);
             ArrayList<Arc> neighbors = node.getArcs();
 
@@ -64,34 +67,64 @@ public class GraphLogic<T> {
                 Node<T> actual = neighbors.get(i).getDestiny();
                 int actualDistance = neighbors.get(i).getWeight();
 
-                if(!shortestPaths.containsKey(actual)/*actual.getMinDistance()==Integer.MAX_VALUE*/)
-                    shortestPaths.put(actual, actualDistance+shortestPaths.get(node));
-                    //actual.setMinDistance(actual.getMinDistance()+node.getMinDistance());
-                else if(shortestPaths.get(actual) > shortestPaths.get(node)+neighbors.get(i).getWeight()/*actual.getMinDistance() > node.getMinDistance() + neighbors.get(i).getWeight()*/)
-                    shortestPaths.put(actual, shortestPaths.get(node) + actualDistance);
-                    //actual.setMinDistance(actual.getMinDistance() + node.getMinDistance() + neighbors.get(i).getWeight());
-                if (actual.isVisited() == false)
-                    nodesToProccess.add(actual);
-            }
-            nodesToProccess.remove(node);
-        }
-        System.out.println(shortestPaths.toString());
-        source.setShortestPaths(shortestPaths);
-        return shortestPaths;
-    }
+                if(!shortestPaths.containsKey(actual)) {
+                    shortestPaths.put(actual, actualDistance + shortestPaths.get(node));
+                    actual.setPrevious(node);
+                }
+                else if(shortestPaths.get(actual) > shortestPaths.get(node)+actualDistance) {
+                    shortestPaths.put(actual, actualDistance + shortestPaths.get(node));
+                    actual.setPrevious(node);
+                }
 
-    public Node<T> getShorterPath(ArrayList<Node<T>> fringe){
-        Node<T> comparable;
-        if(fringe.size()==1)
-            return fringe.get(0);
-        else {
-            comparable = fringe.get(0);
-            for (int i = 1; i < fringe.size(); i++) {
-                if (comparable.getMinDistance() > fringe.get(i).getMinDistance())
-                    comparable = fringe.get(i);
+                if (actual.isVisited() == false)
+                    nodesToProcess.add(actual);
             }
+
+            nodesToProcess.remove(node);
         }
-            return comparable;
+        /*for (int i=0; i<graph.getVertexList().size();i++) {
+            if(graph.getVertexList().get(i).getPrevious() == null)
+                System.out.println("SOY NULL");
+            else{
+                station = (Station) graph.getVertexList().get(i).getValue();
+                System.out.println("current" +station.getIdStation());
+                station = (Station) graph.getVertexList().get(i).getPrevious().getValue();
+                System.out.println(station.getIdStation());}
+        }*/
+
+        Stack<Node<T>> stack = new Stack<>();
+        ArrayList<ArrayList<Node<T>>> paths = new ArrayList<>(new ArrayList<>());
+        for (int i=0; i<graph.getVertexList().size(); i++){
+            ArrayList<Node<T>> path = new ArrayList<>();
+            if(graph.getVertexList().get(i) == source)
+                continue;
+            else{
+                Node<T> actual = graph.getVertexList().get(i);
+                while(actual!=null){
+                    if(stack.contains(actual)) {
+                        //stack.pop();
+                        break;
+                    }
+                    else {
+                        stack.push(actual);
+                        station = (Station) actual.getValue();
+                        //System.out.println(station.getIdStation());
+                        if(actual == source)
+                            break;
+                        else
+                            actual = actual.getPrevious();
+                    }
+                }
+            }
+            while(!stack.isEmpty()){
+                path.add(stack.pop());
+            }
+            paths.add(path);
+        }
+        //System.out.println(graph.getVertexList());
+        //System.out.println(paths);
+        source.setShortestPaths(shortestPaths);
+        return paths;
     }
 
     public ArrayList searchVoidNodes(char key){
@@ -104,8 +137,10 @@ public class GraphLogic<T> {
         return voidNodes;
     }
 
-    public ArrayList checkIfConnectedNode(Node source){
-        return null;
+    public void cleanVisitedNodes(){
+        for(int i=0; i<graph.getVertexList().size(); i++){
+            graph.getVertexList().get(i).setVisited(false);
+        }
     }
 
 }

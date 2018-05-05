@@ -1,6 +1,7 @@
 package Simulation;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -224,21 +225,63 @@ public class Simulator<T> {
         }
 
     }
-/*
-    public void calculateClosestRoutes(){
-        Station sourceStation;
-        Station destinyStation;
+
+    public void initializeStationsAtributes(){
         for (int i=0; i<graph.getVertexList().size(); i++){
-            sourceStation = (Station) graph.getVertexList().get(i).getValue();
-            for (int j=0; j<graph.getVertexList().size(); j++){
-                destinyStation = (Station) graph.getVertexList().get(j).getValue();
-                if(i==j)//If it is the same station
-                    continue;
-                graphLogic.dijkstra(graph.getVertexList().get(i));
-            }
+            ArrayList<ArrayList<Node<T>>> routes = graphLogic.dijkstraShorterRoute(graph.getVertexList().get(i));
+            setPathsToStation(shortestRoutesToString(routes));
+            calculateTimeDistance(graph.getVertexList().get(i), routes);
+            setDestinyStationsToStation(graph.getVertexList().get(i));
         }
 
-    }*/
+    }
+
+    public void setDestinyStationsToStation(Node<T> origin){
+        Station station = (Station) origin.getValue();
+        for(int i=0; i<origin.getArcs().size(); i++){
+            Station station1 = (Station) origin.getArcs().get(i).getDestiny().getValue();
+            station.getDestinyStations().add(station1.getIdStation());
+        }
+    }
+
+    public ArrayList<String> shortestRoutesToString(ArrayList<ArrayList<Node<T>>> paths){
+        ArrayList<String> routes = new ArrayList<>();
+        Station station;
+        for(int i=0; i<paths.size(); i++){
+            ArrayList<Node<T>> path = paths.get(i);
+            String route = "";
+            for (int j=0; j<path.size(); j++){
+                station = (Station) path.get(j).getValue();
+                route+=station.getIdStation();
+            }
+            routes.add(route);
+        }
+        System.out.println(routes);
+        return routes;
+    }
+
+    public void setPathsToStation(ArrayList<String> paths){
+        Node<T> origin = graphLogic.searchVertex(paths.get(0).charAt(0));
+        Station station = (Station) origin.getValue();
+        for (int i=0; i<paths.size(); i++){
+            station.getPaths().put(paths.get(i).charAt(paths.get(i).length()-1), paths.get(i));
+        }
+    }
+
+
+    public Hashtable<Character, Float> calculateTimeDistance(Node<T> origin, ArrayList<ArrayList<Node<T>>> paths){
+        Hashtable<Character,Float> timeDistance = new Hashtable<>();
+        Station station;
+        for(int i=0; i<graph.getVertexList().size(); i++){
+            if(origin.getShortestPaths().containsKey(graph.getVertexList().get(i))) {
+                int distance = origin.getShortestPaths().get(graph.getVertexList().get(i));
+                Float time = (float)distance/120;
+                station = (Station) graph.getVertexList().get(i).getValue();
+                timeDistance.put(station.getIdStation(), time);
+            }
+        }
+        return timeDistance;
+    }
 
     public void printInfo(){
         Station station;
@@ -251,7 +294,7 @@ public class Simulator<T> {
             }
         }
         //System.out.println(graphLogic.dijkstra(graph.getVertexList().get(0)));
-        graphLogic.dijkstraShorterRoute(graph.getVertexList().get(0));
+        //graphLogic.dijkstraShorterRoute(graph.getVertexList().get(0));
     }
 
 }

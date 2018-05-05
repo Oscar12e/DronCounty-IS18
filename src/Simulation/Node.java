@@ -11,6 +11,8 @@ public class Node<T>{
     private ArrayList<Node<T>> availableNodes;
     private boolean visited;
     private Hashtable<Node<T>, Integer> shortestPaths;
+
+    private Node<T> previous = null;
     //For UI
     private OrderedPair orderedPair;
 
@@ -67,6 +69,14 @@ public class Node<T>{
 
     public void setShortestPaths(Hashtable<Node<T>, Integer> shortestPaths) {
         this.shortestPaths = shortestPaths;
+    }
+
+    public Node<T> getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(Node<T> previous) {
+        this.previous = previous;
     }
 
     public boolean isAdjacentNode(Station value){
