@@ -13,7 +13,17 @@ public class Simulator<T> {
     private Timeline timeline;
     private ArrayList<OrderedPair> vertexPositions;
 
-    public Simulator() {
+    private StationsLogic stationsLogic;
+
+    public Simulator(int stationsQuantity, int dronesQuantity, int mapSizeX, int mapSizeY, int arcsPerStation, int highwayWidth) {
+        generateNodes(stationsQuantity, dronesQuantity);
+        generateMap(mapSizeX, mapSizeY);
+        generateArcs(arcsPerStation);
+        generateTripPackages(highwayWidth);
+        initializeStationsAtributes();
+        generateStationsLogic();
+        this.stationsLogic = new StationsLogic();
+        this.stationsLogic.preProcessStations(generateStationsLogic());
     }
 
     public void generateNodes(int stationsQuantity, int dronesQuantity){
@@ -230,9 +240,6 @@ public class Simulator<T> {
 
     }
 
-    public void setTripsToScheduleToStation(ArrayList<Trip> trips){
-
-    }
 
     public void initializeStationsAtributes(){
         for (int i=0; i<graph.getVertexList().size(); i++){
@@ -289,6 +296,16 @@ public class Simulator<T> {
             }
         }
         return timeDistance;
+    }
+
+    public Hashtable<Character, Station> generateStationsLogic(){
+        Station station;
+        Hashtable<Character, Station> stationsToControl = new Hashtable<>();
+        for(int i=0; i<graph.getVertexList().size(); i++){
+            station = (Station) graph.getVertexList().get(i).getValue();
+            stationsToControl.put(station.getIdStation(), station);
+        }
+        return stationsToControl;
     }
 
     public void printInfo(){

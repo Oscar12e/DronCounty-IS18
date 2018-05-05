@@ -13,13 +13,13 @@ import java.util.List;
 public class Main extends Application {
 
     public static void main(String[] args){
-        Simulator s = new Simulator();
-        s.generateNodes(10,10000000);
+        Simulator s = new Simulator(10,10000000, 500, 500, 2, 300);
+        /*s.generateNodes(10,10000000);
         s.generateMap(500,500);
         s.generateArcs(2);
         s.printInfo();
         s.generateTripPackages(300);
-        s.initializeStationsAtributes();
+        s.initializeStationsAtributes();*/
 
 /*
         System.out.println("Iniciando aplicación");

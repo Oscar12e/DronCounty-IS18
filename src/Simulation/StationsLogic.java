@@ -10,13 +10,31 @@ import java.util.List;
  */
 public class StationsLogic {
     private int worstTimeAccepted;
-    private List<String> travelingBetweenStations = new ArrayList<String>(); //Like AB AC AD AE BE BC
+    private List<String> travelingBetweenStations; //Like AB AC AD AE BE BC
 
     private Hashtable <Character, Station> stationsToControl;
-    private Hashtable <String, Hashtable < String, Integer  > > departureTimeDifferenceNeed = new Hashtable <String, Hashtable < String, Integer  > >();
-    private Hashtable <Character, Hashtable< Character, List <Integer> >> availableDepartureTimes = new Hashtable <Character, Hashtable< Character, List <Integer> >>(); //Only need it to make calculationsavaibleDepartureTimes
-    private Hashtable <String, List<String> > routesUsedByTravels = new  Hashtable <String, List<String> >();
+    private Hashtable <String, Hashtable < String, Integer  > > departureTimeDifferenceNeed;
+    private Hashtable <Character, Hashtable< Character, List <Integer> >> availableDepartureTimes; //Only need it to make calculationsavaibleDepartureTimes
+    private Hashtable <String, List<String> > routesUsedByTravels;
 
+    public void preProcessStations( Hashtable <Character, Station> pStationsToControl ) {
+        this.stationsToControl = pStationsToControl;
+        this.availableDepartureTimes = new Hashtable <>();
+        this.stationsToControl = new Hashtable<>();
+        this.travelingBetweenStations = new ArrayList<>();
+        this.departureTimeDifferenceNeed = new Hashtable<>();
+        this.routesUsedByTravels = new  Hashtable <>();
+
+        setRoutesUsedByTravels();
+        setAvaibleDepartureTimes();
+
+        setTravelingBetweenStations();
+
+        setDepartureTimeDifferenceNeed();
+        setWorstTimeAccepted();
+
+
+    }
 
     /**
      * @param pDepartureStation: The station form which the trip its going to sail (i know sailing is for boats)
@@ -227,19 +245,6 @@ public class StationsLogic {
     public void setStationsToControl(Hashtable<Character, Station> stationsToControl) {
         this.stationsToControl = stationsToControl;
 
-        /* delete it, it has to be in other function that works with stationToControl and timeMax*/
-        for (char id: stationsToControl.keySet()){
-
-            availableDepartureTimes.put(id, new Hashtable<Character, List<Integer>>() {{
-                for (char stationId : stationsToControl.keySet()) {
-                    ArrayList<Integer> departureTimeForStation = new ArrayList<Integer>() {{
-                        for (int departureTime = 0; departureTime < worstTimeAccepted; departureTime+=30)
-                            add(departureTime);
-                    }};
-                    put(stationId, departureTimeForStation);
-                }                                                                     }} );
-        }
-
     }
 
     public List<String> getTripsPerStation(){
@@ -251,8 +256,20 @@ public class StationsLogic {
         return availableDepartureTimes;
     }
 
-    public void setAvaibleDepartureTimes(Hashtable<Character, Hashtable<Character, List<Integer>>> avaibleDepartureTimes) {
-        this.availableDepartureTimes = avaibleDepartureTimes;
+    public void setAvaibleDepartureTimes() {
+        for (char id: stationsToControl.keySet()){
+
+            availableDepartureTimes.put(id, new Hashtable<Character, List<Integer>>() {{
+                for (char stationId : stationsToControl.keySet()) {
+                    ArrayList<Integer> departureTimeForStation = new ArrayList<Integer>() {{
+                        for (int departureTime = 0; departureTime < worstTimeAccepted; departureTime+=30)
+                            add(departureTime);
+                    }};
+                    put(stationId, departureTimeForStation);
+                }
+            }
+        } );
+        }
     }
 
     public int getWorstTimeAccepted() {
