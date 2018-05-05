@@ -27,11 +27,11 @@ public class BacktrackingScheduler extends Scheduler {
         String tripCode = tripsPerStations.get(current);
         Station currentStation = logic.getStationsToControl().get(tripCode.charAt(0));
         //All trips se envian (yes, spanglish)
-        List<Integer> timesAvaibles =  logic.getAvailableDepartureTimes().get(tripCode.charAt(0)).get(tripCode.charAt(1));
+        List<Integer> timesAvailed =  logic.getAvailableDepartureTimes().get(tripCode.charAt(0)).get(tripCode.charAt(1));
 
-        for (int currentTime = 0; currentTime < timesAvaibles.size(); currentTime++){
+        for (int currentTime = 0; currentTime < timesAvailed.size(); currentTime++){
 
-            logic.sendTrips(currentStation.getIdStation(), tripCode.charAt(1), timesAvaibles.get(current));
+            logic.sendTrips(currentStation.getIdStation(), tripCode.charAt(1), timesAvailed.get(current));
             //Si no se esta tardando más tiempo del debido
 
             if (true /*Validar que la insersión no se pase del tiempo necesario*/ ) //Unica valiación que nos viene a la mente
@@ -39,7 +39,7 @@ public class BacktrackingScheduler extends Scheduler {
                 if (scheduleStation(tripsPerStations, current++))
                     return true;
 
-            logic.cancelTrip(currentStation.getIdStation(), tripCode.charAt(1), timesAvaibles.get(current));
+            logic.cancelTrip(currentStation.getIdStation(), tripCode.charAt(1), timesAvailed.get(current));
         }
 
         return false;

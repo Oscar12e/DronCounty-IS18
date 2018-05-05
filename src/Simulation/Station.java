@@ -101,6 +101,14 @@ public class Station implements Comparable<Station> {
         this.tripsToSchedule = tripsToSchedule;
     }
 
+    public void getTripsToScheduleAsList(){
+        List<String> t = new ArrayList<String>();
+
+        for (Character destinyID: tripsToSchedule.keySet()){
+            tripsToSchedule.get(destinyID).size();
+        }
+    }
+
     @Override
     public int compareTo(Station otherObject) {
         int difference = this.idStation - otherObject.getIdStation();

@@ -116,7 +116,7 @@ public class Main extends Application {
         sl.setTravelingBetweenStations();
         sl.setRoutesUsedByTravels();
         System.out.println("Ahora viene lo bueno");
-        sl.setDepartureTimeDifferenceNeed2();
+        sl.setDepartureTimeDifferenceNeed();
         System.out.println("Ahora viene lo bueno2");
         sl.updateDepartureTime('a', 'b', 0);
         System.out.println("Ahora viene lo bueno3");
