@@ -201,11 +201,21 @@ public class Simulator<T> {
             for (int j=0; j<tripsQuantity; j++){
                 randomStationIndex = random.nextInt(graph.getVertexList().size());
                 destinyStation = (Station) graph.getVertexList().get(randomStationIndex).getValue();
-                if(j==tripsQuantity-1)
-                    station.getTrips().add(new Trip(destinyStation, leftDrones));
-                else
-                    station.getTrips().add(new Trip(destinyStation, highwayCapacity));
-                //System.out.println(randomStationIndex + "index "+ j + " capacity" +highwayCapacity);
+                if(j==tripsQuantity-1) {
+                        ArrayList<Trip> currentTrips = station.getTripsToSchedule().get(destinyStation.getIdStation());
+                        currentTrips.add(new Trip(destinyStation, leftDrones));
+                }
+                else {
+                    if(station.getTripsToSchedule().containsKey(destinyStation.getIdStation())){
+                        ArrayList<Trip> currentTrips = station.getTripsToSchedule().get(destinyStation.getIdStation());
+                        currentTrips.add(new Trip(destinyStation, highwayCapacity));
+                    }
+                    else{
+                        ArrayList <Trip> currentTrips = new ArrayList<>();
+                        currentTrips.add(new Trip(destinyStation, highwayCapacity));
+                        station.getTripsToSchedule().put(destinyStation.getIdStation(),currentTrips);
+                    }
+                }
             }
             /*System.out.println(station.getTrips().size());
             int contadorA=0;
@@ -223,6 +233,10 @@ public class Simulator<T> {
             System.out.println("Contador B "+ contadorB);
             System.out.println("Contador C "+ contadorC);*/
         }
+
+    }
+
+    public void setTripsToScheduleToStation(ArrayList<Trip> trips){
 
     }
 

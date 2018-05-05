@@ -27,6 +27,7 @@ public class Station implements Comparable<Station> {
         this.trips = new ArrayList<>();
         this.paths = new Hashtable<>();
         this.destinyStations = new ArrayList<>();
+        this.tripsToSchedule = new Hashtable<>();
     }
 
     /*public Station(int ask, char pIdStation) {
