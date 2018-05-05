@@ -49,6 +49,9 @@ public class StationsLogic {
         currentStation.getTripsToSchedule().get(pDestinyStation);
         Trip sendingTrip = currentStation.getTripsToSchedule().get(pDestinyStation).remove(0);
 
+        //Se elimina de los tiempos disponbles
+        availableDepartureTimes.get(pDepartureStation).get(pDestinyStation).remove(pSecondDeparture);
+
         if (currentSchedule.containsKey(pSecondDeparture)){
             ArrayList<Trip> temporaryTripList = currentSchedule.get(pSecondDeparture);
             temporaryTripList.add(0, sendingTrip);
@@ -58,8 +61,7 @@ public class StationsLogic {
             currentSchedule.put(pSecondDeparture, temporaryTripList);
         }
         //Updates the desparture times for all stations
-        return updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture);
-
+        return updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture, true);
     }
 
 
@@ -71,7 +73,17 @@ public class StationsLogic {
         Trip cancelledTrip = currentSchedule.get(pSecondDeparture).remove(0);
         currentStation.getTripsToSchedule().get(pDestinyStation).add(cancelledTrip);
 
-        //Corrects the update here, method is need
+        List<Integer> departureTimes = availableDepartureTimes.get(pDepartureStation).get(pDestinyStation);
+
+        int timeIndex = 0;
+
+        while (timeIndex < departureTimes.size()){
+            if (departureTimes.get(timeIndex) > pSecondDeparture)
+                departureTimes.add(timeIndex, pSecondDeparture);
+            break;
+        }
+
+        updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture, false);;
     }
 
     /**
@@ -80,7 +92,7 @@ public class StationsLogic {
      * @param pSecondDeparture Integer with the second select for the departure of the trip
      * This method makes an update based on the router indicated by pRouteId in time indicated by pSecondDeparture.
     */
-    public boolean updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
+    public boolean updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture, boolean pUpdateSending){
         //Creates a hash with the conflicting trips of other stations, based on where is the trip starting and where is going
         Hashtable < String, Integer  > stationsToUpdate =  this.departureTimeDifferenceNeed.get(new StringBuilder().append(pDepartureStation).append(pDestinyStation).toString());
 
@@ -113,6 +125,8 @@ public class StationsLogic {
 
                 //Gets the value that has to be add to make sure no collision will happen
                 int update = conflictTime - departureTimes.get(current) + 1;
+                if (pUpdateSending == false)
+                    update = -1 * update;
                 while (current < departureTimes.size()) {
                     departureTimes.set(current, departureTimes.get(current) + update);
                     current++;
@@ -142,12 +156,6 @@ public class StationsLogic {
                 this.travelingBetweenStations.add(new StringBuilder().append(stationsIDs.get(currentDepartureStation)).append(stationsIDs.get(currentDestinyStation)).toString());
             }
         }
-
-            /*for (int i = 0; i< 5; i++){
-                this.travelingBetweenStations.add(new StringBuilder().append(currentStationId).append("abc$#".charAt(i)).toString());
-            }*/
-
-
     }
 
 
@@ -230,11 +238,11 @@ public class StationsLogic {
 
 
     public void updateDepartureTimeDifferenceNeed(String fromStation, String toStation){
-        Hashtable<String, Integer> conflitctosA =  this.departureTimeDifferenceNeed.get(fromStation);
+        Hashtable<String, Integer> fromStationDifference =  this.departureTimeDifferenceNeed.get(fromStation);
         float exactDifference = this.stationsToControl.get(fromStation.charAt(0)).getTimeDistance().get(toStation.charAt(1)) - this.stationsToControl.get(toStation.charAt(0)).getTimeDistance().get(toStation.charAt(1));
         int worseCase = Math.round(exactDifference + 0.4f);
-        conflitctosA.put(toStation, worseCase);
-        this.departureTimeDifferenceNeed.replace(fromStation, conflitctosA);
+        fromStationDifference.put(toStation, worseCase);
+        this.departureTimeDifferenceNeed.replace(fromStation, fromStationDifference);
     }
 
 
