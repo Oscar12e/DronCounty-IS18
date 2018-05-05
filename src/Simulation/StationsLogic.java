@@ -19,16 +19,16 @@ public class StationsLogic {
 
 
     /**
-     *
      * @param pDepartureStation: The station form which the trip its going to sail (i know sailing is for boats)
      * @param pDestinyStation: The station from which the trip is going to
      * @param pSecondDeparture: The second the trip is leaving
      */
-    public void sendTrips(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
+    public boolean sendTrips(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
         Station currentStation  = stationsToControl.get(pDepartureStation);
 
         Hashtable <Integer, ArrayList <Trip> > currentSchedule = currentStation.getSchedule();
 
+        currentStation.getTripsToSchedule().get(pDestinyStation);
         Trip sendingTrip = currentStation.getTripsToSchedule().get(pDestinyStation).remove(0);
 
         if (currentSchedule.containsKey(pSecondDeparture)){
@@ -40,7 +40,8 @@ public class StationsLogic {
             currentSchedule.put(pSecondDeparture, temporaryTripList);
         }
         //Updates the desparture times for all stations
-        updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture);
+        return updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture);
+
     }
 
 
@@ -61,7 +62,7 @@ public class StationsLogic {
      * @param pSecondDeparture Integer with the second select for the departure of the trip
      * This method makes an update based on the router indicated by pRouteId in time indicated by pSecondDeparture.
     */
-    public void updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
+    public boolean updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
         //Creates a hash with the conflicting trips of other stations, based on where is the trip starting and where is going
         Hashtable < String, Integer  > stationsToUpdate =  this.departureTimeDifferenceNeed.get(new StringBuilder().append(pDepartureStation).append(pDestinyStation).toString());
 
@@ -87,7 +88,7 @@ public class StationsLogic {
                 int current = 0;
                 //Checks all times till finding a time that cause problems
                 while (current < departureTimes.size()) {
-                    if (conflictTime <= departureTimes.get(current) + 29)
+                    if (departureTimes.get(current) -29 <= conflictTime && conflictTime  <= departureTimes.get(current) + 29)
                         break;
                     current++;
                 }
@@ -99,11 +100,15 @@ public class StationsLogic {
                     current++;
                 }
 
+
+
                 //Saves the new list
                 departureTimesToUpdate.replace(conflictingDestiny, departureTimes);
 
             availableDepartureTimes.replace(conflictingStationID, departureTimesToUpdate);
         }
+
+        return true;
 
     }
 
@@ -224,18 +229,15 @@ public class StationsLogic {
 
         /* delete it, it has to be in other function that works with stationToControl and timeMax*/
         for (char id: stationsToControl.keySet()){
-            availableDepartureTimes.put(id, new Hashtable<Character, List<Integer>>(){{
-                    for (char id2 : stationsToControl.keySet()) {
-                        ArrayList<Integer> l2 = new ArrayList<Integer>() {{
-                            add(0);
-                            add(30);
-                            add(60);
-                            add(90);
-                            add(120);
-                        }};
-                        put(id2, l2);
-                    }
-                }});
+
+            availableDepartureTimes.put(id, new Hashtable<Character, List<Integer>>() {{
+                for (char stationId : stationsToControl.keySet()) {
+                    ArrayList<Integer> departureTimeForStation = new ArrayList<Integer>() {{
+                        for (int departureTime = 0; departureTime < worstTimeAccepted; departureTime+=30)
+                            add(departureTime);
+                    }};
+                    put(stationId, departureTimeForStation);
+                }                                                                     }} );
         }
 
     }
