@@ -10,7 +10,7 @@ public class Graph<T>{
     }
 
     public Graph(){
-        vertexList = new ArrayList<Node<T>>();
+        vertexList = new ArrayList<>();
     }
 
 }
