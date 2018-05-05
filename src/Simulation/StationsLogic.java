@@ -10,20 +10,32 @@ import java.util.List;
  */
 public class StationsLogic {
     private int worstTimeAccepted;
-    private List<String> travelingBetweenStations = new ArrayList<String>(); //Like AB AC AD AE BE BC
+    private List<String> travelingBetweenStations; //Like AB AC AD AE BE BC
 
     private Hashtable <Character, Station> stationsToControl;
-    private Hashtable <String, Hashtable < String, Integer  > > departureTimeDifferenceNeed = new Hashtable <String, Hashtable < String, Integer  > >();
-    private Hashtable <Character, Hashtable< Character, List <Integer> >> availableDepartureTimes = new Hashtable <Character, Hashtable< Character, List <Integer> >>(); //Only need it to make calculationsavaibleDepartureTimes
-    private Hashtable <String, List<String> > routesUsedByTravels = new  Hashtable <String, List<String> >();
+    private Hashtable <String, Hashtable < String, Integer  > > departureTimeDifferenceNeed;
+    private Hashtable <Character, Hashtable< Character, List <Integer> >> availableDepartureTimes; //Only need it to make calculationsavaibleDepartureTimes
+    private Hashtable <String, List<String> > routesUsedByTravels;
 
-    public void startPreProcessingStations(){
+    public void preProcessStations( Hashtable <Character, Station> pStationsToControl ) {
+        this.stationsToControl = pStationsToControl;
+        this.availableDepartureTimes = new Hashtable <>();
+        this.stationsToControl = new Hashtable<>();
+        this.travelingBetweenStations = new ArrayList<>();
+        this.departureTimeDifferenceNeed = new Hashtable<>();
+        this.routesUsedByTravels = new  Hashtable <>();
+
         setRoutesUsedByTravels();
+        setAvaibleDepartureTimes();
+
         setTravelingBetweenStations();
+
         setDepartureTimeDifferenceNeed();
         setWorstTimeAccepted();
-        setAvaibleDepartureTimes();
+
+
     }
+
     /**
      * @param pDepartureStation: The station form which the trip its going to sail (i know sailing is for boats)
      * @param pDestinyStation: The station from which the trip is going to
@@ -36,7 +48,6 @@ public class StationsLogic {
 
         currentStation.getTripsToSchedule().get(pDestinyStation);
         Trip sendingTrip = currentStation.getTripsToSchedule().get(pDestinyStation).remove(0);
-        this.availableDepartureTimes.get(pDepartureStation).get(pDestinyStation).remove(pSecondDeparture);
 
         if (currentSchedule.containsKey(pSecondDeparture)){
             ArrayList<Trip> temporaryTripList = currentSchedule.get(pSecondDeparture);
@@ -47,30 +58,19 @@ public class StationsLogic {
             currentSchedule.put(pSecondDeparture, temporaryTripList);
         }
         //Updates the desparture times for all stations
-        return updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture, true);
+        return updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture);
 
     }
 
 
-    public void cancelTrip(char pDepartureStation, char pDestinyStation, int pSecondDeparture) {
-        Station currentStation = stationsToControl.get(pDepartureStation);
+    public void cancelTrip(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
+        Station currentStation  = stationsToControl.get(pDepartureStation);
 
-        Hashtable<Integer, ArrayList<Trip>> currentSchedule = currentStation.getSchedule();
+        Hashtable <Integer, ArrayList <Trip> > currentSchedule = currentStation.getSchedule();
 
         Trip cancelledTrip = currentSchedule.get(pSecondDeparture).remove(0);
         currentStation.getTripsToSchedule().get(pDestinyStation).add(cancelledTrip);
 
-        //Se ingresa de vuelta si no se logro usar
-        int timeIndex = 0;
-        List<Integer> timesToModify = this.availableDepartureTimes.get(pDepartureStation).get(pDestinyStation);
-        while (timeIndex < timesToModify.size()) {
-            if (timesToModify.get(timeIndex) > pSecondDeparture) {
-                timesToModify.add(timeIndex, pSecondDeparture);
-                break;
-            }
-        }
-
-        updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture, false);
         //Corrects the update here, method is need
     }
 
@@ -80,7 +80,7 @@ public class StationsLogic {
      * @param pSecondDeparture Integer with the second select for the departure of the trip
      * This method makes an update based on the router indicated by pRouteId in time indicated by pSecondDeparture.
     */
-    private boolean updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture, boolean updateProcessSending){
+    public boolean updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
         //Creates a hash with the conflicting trips of other stations, based on where is the trip starting and where is going
         Hashtable < String, Integer  > stationsToUpdate =  this.departureTimeDifferenceNeed.get(new StringBuilder().append(pDepartureStation).append(pDestinyStation).toString());
 
@@ -113,18 +113,12 @@ public class StationsLogic {
 
                 //Gets the value that has to be add to make sure no collision will happen
                 int update = conflictTime - departureTimes.get(current) + 1;
-
-                //En caso de que el proceso de actualización sea para cancelar
-                if (updateProcessSending == false)
-                    update = -1 * update;
-
                 while (current < departureTimes.size()) {
-                    if (departureTimes.get(current) + update > this.worstTimeAccepted)
-                        return false;
-
                     departureTimes.set(current, departureTimes.get(current) + update);
                     current++;
                 }
+
+
 
                 //Saves the new list
                 departureTimesToUpdate.replace(conflictingDestiny, departureTimes);
@@ -235,7 +229,7 @@ public class StationsLogic {
 
 
 
-    private void updateDepartureTimeDifferenceNeed(String fromStation, String toStation){
+    public void updateDepartureTimeDifferenceNeed(String fromStation, String toStation){
         Hashtable<String, Integer> conflitctosA =  this.departureTimeDifferenceNeed.get(fromStation);
         float exactDifference = this.stationsToControl.get(fromStation.charAt(0)).getTimeDistance().get(toStation.charAt(1)) - this.stationsToControl.get(toStation.charAt(0)).getTimeDistance().get(toStation.charAt(1));
         int worseCase = Math.round(exactDifference + 0.4f);
@@ -250,6 +244,7 @@ public class StationsLogic {
 
     public void setStationsToControl(Hashtable<Character, Station> stationsToControl) {
         this.stationsToControl = stationsToControl;
+
     }
 
     public List<String> getTripsPerStation(){
@@ -271,7 +266,9 @@ public class StationsLogic {
                             add(departureTime);
                     }};
                     put(stationId, departureTimeForStation);
-                }                                                                     }} );
+                }
+            }
+        } );
         }
     }
 
