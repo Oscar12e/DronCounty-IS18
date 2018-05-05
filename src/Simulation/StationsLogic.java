@@ -17,7 +17,6 @@ public class StationsLogic {
     private Hashtable <Character, Hashtable< Character, List <Integer> >> availableDepartureTimes = new Hashtable <Character, Hashtable< Character, List <Integer> >>(); //Only need it to make calculationsavaibleDepartureTimes
     private Hashtable <String, List<String> > routesUsedByTravels = new  Hashtable <String, List<String> >();
 
-
     /**
      * @param pDepartureStation: The station form which the trip its going to sail (i know sailing is for boats)
      * @param pDestinyStation: The station from which the trip is going to
@@ -30,6 +29,7 @@ public class StationsLogic {
 
         currentStation.getTripsToSchedule().get(pDestinyStation);
         Trip sendingTrip = currentStation.getTripsToSchedule().get(pDestinyStation).remove(0);
+        this.availableDepartureTimes.get(pDepartureStation).get(pDestinyStation).remove(pSecondDeparture);
 
         if (currentSchedule.containsKey(pSecondDeparture)){
             ArrayList<Trip> temporaryTripList = currentSchedule.get(pSecondDeparture);
@@ -40,19 +40,30 @@ public class StationsLogic {
             currentSchedule.put(pSecondDeparture, temporaryTripList);
         }
         //Updates the desparture times for all stations
-        return updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture);
+        return updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture, true);
 
     }
 
 
-    public void cancelTrip(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
-        Station currentStation  = stationsToControl.get(pDepartureStation);
+    public void cancelTrip(char pDepartureStation, char pDestinyStation, int pSecondDeparture) {
+        Station currentStation = stationsToControl.get(pDepartureStation);
 
-        Hashtable <Integer, ArrayList <Trip> > currentSchedule = currentStation.getSchedule();
+        Hashtable<Integer, ArrayList<Trip>> currentSchedule = currentStation.getSchedule();
 
         Trip cancelledTrip = currentSchedule.get(pSecondDeparture).remove(0);
         currentStation.getTripsToSchedule().get(pDestinyStation).add(cancelledTrip);
 
+        //Se ingresa de vuelta si no se logro usar
+        int timeIndex = 0;
+        List<Integer> timesToModify = this.availableDepartureTimes.get(pDepartureStation).get(pDestinyStation);
+        while (timeIndex < timesToModify.size()) {
+            if (timesToModify.get(timeIndex) > pSecondDeparture) {
+                timesToModify.add(timeIndex, pSecondDeparture);
+                break;
+            }
+        }
+
+        updateDepartureTime(pDepartureStation, pDestinyStation, pSecondDeparture, false);
         //Corrects the update here, method is need
     }
 
@@ -62,7 +73,7 @@ public class StationsLogic {
      * @param pSecondDeparture Integer with the second select for the departure of the trip
      * This method makes an update based on the router indicated by pRouteId in time indicated by pSecondDeparture.
     */
-    public boolean updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
+    public boolean updateDepartureTime(char pDepartureStation, char pDestinyStation, int pSecondDeparture, boolean updateProcessSending){
         //Creates a hash with the conflicting trips of other stations, based on where is the trip starting and where is going
         Hashtable < String, Integer  > stationsToUpdate =  this.departureTimeDifferenceNeed.get(new StringBuilder().append(pDepartureStation).append(pDestinyStation).toString());
 
@@ -95,12 +106,18 @@ public class StationsLogic {
 
                 //Gets the value that has to be add to make sure no collision will happen
                 int update = conflictTime - departureTimes.get(current) + 1;
+
+                //En caso de que el proceso de actualización sea para cancelar
+                if (this.updateProcessSending == false)
+                    update = -1 * update;
+
                 while (current < departureTimes.size()) {
+                    if (departureTimes.get(current) + update > this.worstTimeAccepted)
+                        return false;
+
                     departureTimes.set(current, departureTimes.get(current) + update);
                     current++;
                 }
-
-
 
                 //Saves the new list
                 departureTimesToUpdate.replace(conflictingDestiny, departureTimes);

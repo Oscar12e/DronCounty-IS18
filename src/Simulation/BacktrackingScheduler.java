@@ -10,7 +10,8 @@ public class BacktrackingScheduler extends Scheduler {
 
     @Override
     public boolean runSimulation() {
-        logic.getTripsPerStation();
+        //scheduleStation()
+        //scheduleStation(, 0);
         return false;
     }
 
@@ -31,10 +32,9 @@ public class BacktrackingScheduler extends Scheduler {
 
         for (int currentTime = 0; currentTime < timesAvailed.size(); currentTime++){
 
-            logic.sendTrips(currentStation.getIdStation(), tripCode.charAt(1), timesAvailed.get(current));
             //Si no se esta tardando más tiempo del debido
 
-            if (true /*Validar que la insersión no se pase del tiempo necesario*/ ) //Unica valiación que nos viene a la mente
+            if (logic.sendTrips(currentStation.getIdStation(), tripCode.charAt(1), timesAvailed.get(current))) //Unica valiación que nos viene a la mente
                 // Ya que no puede haber choques
                 if (scheduleStation(tripsPerStations, current++))
                     return true;
