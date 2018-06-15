@@ -25,25 +25,25 @@ public class BacktrackingScheduler extends Scheduler {
         if (current == tripsPerStations.size())
             return true;
 
-        String tripCode = tripsPerStations.get(current);
-        Station currentStation = logic.getStationsToControl().get(tripCode.charAt(0));
-        //All trips se envian (yes, spanglish)
-        List<Integer> timesAvailed =  logic.getAvailableDepartureTimes().get(tripCode.charAt(0)).get(tripCode.charAt(1));
+        String tripCode = tripsPerStations.get(current); //2
+        Station currentStation = logic.getStationsToControl().get(tripCode.charAt(0)); //4
+        //All trips are send
+        List<Integer> timesAvailed =  logic.getAvailableDepartureTimes().get(tripCode.charAt(0)).get(tripCode.charAt(1)); //5
 
-        for (int currentTime = 0; currentTime < timesAvailed.size(); currentTime++){
+        for (int currentTime = 0; currentTime < timesAvailed.size(); currentTime++){ //n      +3
 
             //Si no se esta tardando más tiempo del debido
 
-            if (logic.sendTrips(currentStation.getIdStation(), tripCode.charAt(1), timesAvailed.get(current))) //Unica valiación que nos viene a la mente
+            if (logic.sendTrips(currentStation.getIdStation(), tripCode.charAt(1), timesAvailed.get(current))) // 30 * n
                 // Ya que no puede haber choques
-                if (scheduleStation(tripsPerStations, current++))
+                if (scheduleStation(tripsPerStations, current++)) //n
                     return true;
 
-            logic.cancelTrip(currentStation.getIdStation(), tripCode.charAt(1), timesAvailed.get(current));
+            logic.cancelTrip(currentStation.getIdStation(), tripCode.charAt(1), timesAvailed.get(current)); //n
         }
 
         return false;
-    }
+    }   //O(n^3)
 
 
 

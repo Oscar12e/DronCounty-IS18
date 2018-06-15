@@ -1,5 +1,6 @@
 package Simulation;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 
@@ -18,16 +19,16 @@ public class ProbabilisticScheduler extends Scheduler {
         Random random = new Random(System.currentTimeMillis());
         int randomIndex;
 
-        while(tripsPerStation.size()!=0){
+        while(tripsPerStation.size()!=0){ //n
             randomIndex = random.nextInt(tripsPerStation.size());
 
             String tripCode = tripsPerStation.remove(randomIndex);
             List<Integer> timesAvailable = logic.getAvailableDepartureTimes().get(tripCode.charAt(0)).get(tripCode.charAt(1));
             randomIndex = random.nextInt(timesAvailable.size());
             int departureTime = timesAvailable.get(randomIndex);
-            logic.sendTrips(tripsPerStation.get(randomIndex).charAt(0), tripsPerStation.get(randomIndex).charAt(tripsPerStation.get(randomIndex).length()-1), departureTime);
+            logic.sendTrips(tripsPerStation.get(randomIndex).charAt(0), tripsPerStation.get(randomIndex).charAt(tripsPerStation.get(randomIndex).length()-1), departureTime); //30*n
         }
         return true;
-    }
+    } //O(n^2)
 
 }

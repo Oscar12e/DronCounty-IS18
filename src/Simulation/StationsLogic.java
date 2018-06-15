@@ -41,10 +41,10 @@ public class StationsLogic {
      * @param pDestinyStation: The station from which the trip is going to
      * @param pSecondDeparture: The second the trip is leaving
      */
-    public boolean sendTrips(char pDepartureStation, char pDestinyStation, int pSecondDeparture){
-        Station currentStation  = stationsToControl.get(pDepartureStation);
+    public boolean sendTrips(char pDepartureStation, char pDestinyStation, int pSecondDeparture){ //O(C)
+        Station currentStation  = stationsToControl.get(pDepartureStation); // 3
 
-        Hashtable <Integer, ArrayList <Trip> > currentSchedule = currentStation.getSchedule();
+        Hashtable <Integer, ArrayList <Trip> > currentSchedule = currentStation.getSchedule(); //2
 
         currentStation.getTripsToSchedule().get(pDestinyStation);
         Trip sendingTrip = currentStation.getTripsToSchedule().get(pDestinyStation).remove(0);
@@ -77,7 +77,7 @@ public class StationsLogic {
 
         int timeIndex = 0;
 
-        while (timeIndex < departureTimes.size()){
+        while (timeIndex < departureTimes.size()){ //n
             if (departureTimes.get(timeIndex) > pSecondDeparture)
                 departureTimes.add(timeIndex, pSecondDeparture);
             break;
@@ -97,7 +97,7 @@ public class StationsLogic {
         Hashtable < String, Integer  > stationsToUpdate =  this.departureTimeDifferenceNeed.get(new StringBuilder().append(pDepartureStation).append(pDestinyStation).toString());
 
         //Takes the idCode for every Station with trips that cause conflicts, so it can use it to take data from the conflicting Station
-        for (String conflictingStationRoute : stationsToUpdate.keySet()){
+        for (String conflictingStationRoute : stationsToUpdate.keySet()){ //n = 30 (peor de los casos es 30, no mas, ya que hay 30 estaciones conflictivas)
             char conflictingStationID = conflictingStationRoute.charAt(0);
             char conflictingDestiny = conflictingStationRoute.charAt(1);
             //Gets a hash with 'K': Destiny V: 'ArrayList of departure times'
@@ -117,7 +117,7 @@ public class StationsLogic {
                 //We use two cycles cos it gives a better worst case scenario
                 int current = 0;
                 //Checks all times till finding a time that cause problems
-                while (current < departureTimes.size()) {
+                while (current < departureTimes.size()) { //n
                     if (departureTimes.get(current) -29 <= conflictTime && conflictTime  <= departureTimes.get(current) + 29)
                         break;
                     current++;
@@ -127,7 +127,7 @@ public class StationsLogic {
                 int update = conflictTime - departureTimes.get(current) + 1;
                 if (pUpdateSending == false)
                     update = -1 * update;
-                while (current < departureTimes.size()) {
+                while (current < departureTimes.size()) {//n
                     departureTimes.set(current, departureTimes.get(current) + update);
                     current++;
                 }
